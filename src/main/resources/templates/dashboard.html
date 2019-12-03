@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
+<div th:include="bootstrapcdn.html"/>
+<head>
+    <meta charset="utf-8">
+    <title>Bibliothèque P7</title>
+</head>
+
+<body>
+
+<!-- nav bar -->
+<div th:include="navbar"/>
+
+
+<div class="container">
+
+    <div class="row" id="bandeau0">
+
+        <div class="col-md-12">
+
+            <h1>Bienvenu(e) <span th:text="${membre.getPrenom()}" /> <span th:text="${membre.getNom()}" /></h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+
+
+           <h2>Mes emprunts en cours</h2>
+
+            <table style="margin-top: 10px" class="table">
+                <thead>
+                <tr><th>Livre</th>
+
+                    <th>Date d'emprunt</th>
+                    <th>Date limite de retour</th>
+                    <th>Rendu</th>
+                    <th>Prolonger</th>
+
+
+                </tr></thead>
+                <tbody>
+                <tr th:each="ligneE : ${listeEmprunts}" th:style="${ligneE.isRendu()}? 'color:red' : 'color:green'">
+                    <td th:text="${ligneE.getLivre().getTitre()}">Nom Topo</td>
+                    <td th:text="${#dates.format(ligneE.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
+                    <td th:text="${#dates.format(ligneE.getFinDate(), 'dd-MM-yyyy')}">EndDate</td>
+                    <td th:text="${ligneE.isRendu()? 'Oui' : 'Non'}">Rendu</td>
+                    <td><a th:href="${'/client/prolongerEmprunt?empruntId='+ ligneE.getId()}"><button th:if="${!(ligneE.isProlonge()||ligneE.isRendu())}">+ 4 semaines</button></a><span th:if="${(ligneE.isProlonge()||ligneE.isRendu())}">Impossible</span></td>
+
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+    <br>
+</div>
+
+</div>
+</body>
+<div th:include="jscdn.html"/>
+</html>

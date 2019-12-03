@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:include="bootstrapcdn.html"/>
+    <meta charset="utf-8">
+    <title>Bibliothèque P7 - OpenClassRooms - Parcours DA Java - Projet 7</title>
+</head>
+<body>
+
+<div th:include="navbar.html"/>
+
+<div class="container">
+
+    <div class="row">
+        <div style="text-align: center" class="col-md-12" id="bandeau0">
+
+            <h1>Bienvenue sur le site de votre bibliothèque !</h1>
+
+            <h3>Une version ReactJS de cette API est disponible <a href="http://vps671888.ovh.net:3000/login">ICI</a>
+            </h3>
+        </div>
+    </div>
+        <div class="row">
+
+
+
+
+        <div style="text-align: center" class="col-md-12" id="bandeau">
+            <div th:if="${!session.isEmpty()}">
+
+                <p>Vous êtes connecté en tant que <span th:text="${session.membrePrenom + ' ' + session.membreNom} + ' 😄'"></span></p>
+
+                <p>Il y a actuellement : <span th:text="${nbLivres}"> NbLivres </span> livres dans la bibliothèques</p>
+                <p><span th:text="${nbLivresEmpruntes}">NbLivresEmpruntés</span> livres ont été empruntés !</p>
+                <p>Il reste <span th:text="${nbLivresDispo}">NbDispo</span> ouvrages disponibles :)</p>
+            </div>
+
+
+            <img src="../img/accueil.jpg">
+            <br>
+            <br>
+            <div th:if="${session.isEmpty()}">
+
+            <h1> Site Web réalité par Julien Marcesse dans le cadre de son parcours Développeur d'Application Java</h1>
+            <div style="text-align: left">
+            <p> Projet 7, utilisant les technologies suivantes :</p>
+            <li> Spring Boot, Spring Data, Spring Security</li>
+            <li> API RestFul, Client OpenFeign</li>
+            <li> PostgreSql</li>
+            <li> JWT Authentication</li>
+            <li> CSS Boostrap</li>
+            </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+</body>
+
+</html>

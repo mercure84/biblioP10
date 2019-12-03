@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
+<div th:include="bootstrapcdn.html"/>
+<head>
+    <head>
+        <meta charset="utf-8">
+        <title>Page Administrateur</title>
+    </head>
+<body>
+
+<!-- nav bar -->
+<div th:include="navbar"/>
+
+<div class="container">
+    <div class="row" id="bandeau0">
+        <div class="col-md-12">
+            <h2> Bienvenu sur la page Administrateur </h2>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-10">
+
+            <p>Cette interface peut servir à créer des emprunts ou à les supprimer : on peut imaginer qu'un employé de
+                la bibliothèque se connecte en tant qu'admin pour pouvoir enregistrer les emprunts et les
+                restitutions.</p>
+
+            <p>Attention l'outil est en version ALPHA : les saisies ne demandes pas de confirmation et sont validées
+                immédiatement</p>
+
+            <a th:href="@{/client/admin/batch}"><button>Lancer le batch des emprunts échus !</button></a>
+            <p th:if="${batchMessage}" style="color:orange">Le batch a édité un fichier texte disponible à la racine du projet</p>
+
+
+            <div th:if="${message != null}">
+                <p style="color:red"><span
+                        th:text="${message}"></span>
+                </p>
+
+                <p></p><a href="/client/admin">
+                <button>Recharger la page</button>
+            </a></div>
+        </div>
+
+        <div th:if="${message == null}" class="col-md-10">
+
+            <h2>Enregistrer un emprunt : </h2>
+
+            <div class="my-form">
+                <div class="card">
+                    <div class="card-header">Login</div>
+                    <div class="card-body">
+
+                        <form name='f' th:action="@{/client/creerEmprunt}" th:object="${creationEmprunt}" method='POST'>
+
+                            <div class="form-group row">
+                                <label for="user" class="col-md-4 col-form-label text-md-right">Membre Id</label>
+                                <div class="col-md-6">
+                                    <select id="user" class="form-control" name="user" th:field="*{membreId}">
+                                        <option th:each="membre : ${listeMembre}"
+                                                th:value="${membre.getId()}"
+                                                th:utext="${membre.getId() + ' ' + membre.getNom()}"/>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="livre" class="col-md-4 col-form-label text-md-right">Mot de Passe</label>
+                                <div class="col-md-6">
+                                    <select id="livre" class="form-control" name="livre" th:field="*{livreId}">
+                                    <option th:each="livre : ${listeLivresDispo}"
+                                            th:value="${livre.getId()}"
+                                            th:utext="${livre.getId() + ' ' + livre.getTitre()}"/>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-8 offset-md-2">
+                                <button type="submit" class="btn btn-secondary">
+                                    Emprunter
+                                </button>
+                             </div>
+
+                        </form>
+
+
+                    </div></div></div>
+
+
+
+        <h2>Restituer un emprunt : </h2>
+
+        <table style="margin-top: 10px" class="table">
+            <thead>
+            <tr>
+                <th>Emprunt n°</th>
+                <th>Date d'emprunt</th>
+                <th>Titre Livre + ISBN</th>
+                <th>Membre</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ligneE : ${empruntsEncours}">
+                <td th:text="${ligneE.getId()}">Emprunt Id</td>
+                <td th:text="${#dates.format(ligneE.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
+                <td th:text="${ligneE.getLivre().getTitre() + ' ' + ligneE.getLivre().getIsbn()}">Book</td>
+                <td th:text="${ligneE.membre.getPrenom() + ' ' + ligneE.getMembre().getNom()}">Livre</td>
+
+                <td><a th:href="${'/client/stopperEmprunt?empruntId='+ ligneE.getId()}">
+                    <button>Restituer</button>
+                </a></td>
+
+            </tr>
+            </tbody>
+        </table>
+
+
+
+
+    </div>
+    </div>
+
+</div>
+
+</div>
+
+</body>
+<div th:include="jscdn.html"/>
+</html>
