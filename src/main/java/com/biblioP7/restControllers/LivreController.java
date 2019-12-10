@@ -31,7 +31,7 @@ public class LivreController {
     @CrossOrigin("*")
     @RequestMapping(value="/api/Livre/listeLivresDisponibles", method= RequestMethod.GET)
     public List<Livre> listeLivresDisponibles(){
-        List<Livre> livres = livreDao.livresParStockDispoDecroissant();
+        List<Livre> livres = livreDao.findLivresByStockDisponibleGreaterThan(0);
         return livres;
     }
 
