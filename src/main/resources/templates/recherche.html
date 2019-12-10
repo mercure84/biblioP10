@@ -79,8 +79,10 @@
                 <td th:text="${ligneL.getTitre()}">Nom Livre</td>
                 <td th:text="${ligneL.getAuteurNom() + ' ' + ligneL.getAuteurPrenom()}">Auteur</td>
                 <td th:text="${ligneL.getEditeur()}">Editeur</td>
-                <td th:text="${ligneL.getStockDisponible() > 0 ? ligneL.getStockDisponible() :'Aucun exemplaire'}"
-                    th:style="${ligneL.getStockDisponible() > 0 ? 'color:green':'color:red'}">Dispo</td>
+                <td th:if="${ligneL.getStockDisponible() > 0}" th:text="${ligneL.getStockDisponible()}"
+                    style="color:green"></td>
+                <td th:if="${ligneL.getStockDisponible() == 0}">Aucune disponibilité : <button>Réserver</button></td>
+
             </tr>
             </tbody>
         </table>
@@ -100,7 +102,7 @@
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th>Editeur</th>
-                <th>Nombre d'exemplaires dispo</th>
+                <th>Exemplaires disponibles</th>
 
             </tr>
             </thead>
