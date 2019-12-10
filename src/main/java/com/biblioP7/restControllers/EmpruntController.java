@@ -51,13 +51,13 @@ public class EmpruntController {
 
 
 
-    @RequestMapping(value="/api/listeEmprunts", method= RequestMethod.GET)
+    @GetMapping(value="/api/listeEmprunts")
     public List<Emprunt> listeEmprunts(){
         List<Emprunt> emprunts = empruntDao.findAll();
         return emprunts;
     }
 
-    @RequestMapping(value="/api/listeEmpruntsEncours", method= RequestMethod.GET)
+    @GetMapping(value="/api/listeEmpruntsEncours")
     public List<Emprunt> listeEmpruntsEncours(){
         List<Emprunt> emprunts = empruntDao.findEmpruntsEncours(false);
         return emprunts;
