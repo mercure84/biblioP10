@@ -31,7 +31,7 @@ public class LivreController {
     @CrossOrigin("*")
     @RequestMapping(value="/api/Livre/listeLivresDisponibles", method= RequestMethod.GET)
     public List<Livre> listeLivresDisponibles(){
-        List<Livre> livres = livreDao.findLivresByDisponibleIsTrueOrderById();
+        List<Livre> livres = livreDao.livresParStockDispoDecroissant();
         return livres;
     }
 
@@ -42,7 +42,7 @@ public class LivreController {
     public Map<String, Integer> nbLivres(){
         Map<String, Integer> resultat = new HashMap<>();
         int nbLivres = livreDao.findAll().size();
-        int nbLivresDispo = livreDao.findLivresByDisponibleIsTrueOrderById().size();
+        int nbLivresDispo = livreDao.findLivresByStockDisponibleGreaterThan(0).size();
 
         resultat.put("nbLivres", nbLivres);
         resultat.put("nbLivresDispo", nbLivresDispo);
@@ -62,7 +62,7 @@ public class LivreController {
     @CrossOrigin("*")
     @GetMapping(value="/api/Livre/randomLivre")
     public Livre randomLivreDispo(){
-        List<Livre> livresDispo = livreDao.findLivresByDisponibleIsTrueOrderById();
+        List<Livre> livresDispo = livreDao.findLivresByStockDisponibleGreaterThan(0);
         Random rand = new Random();
         Livre livreRandom = livresDispo.get(rand.nextInt(livresDispo.size()));
         return livreRandom;

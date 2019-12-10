@@ -49,7 +49,7 @@ public class AdminController {
         model.addAttribute("empruntsEncours", empruntsEnCours);
         model.addAttribute("creationEmprunt", new CreationEmprunt());
         model.addAttribute("listeMembre", membreServiceClient.listeMembres(token));
-        model.addAttribute("listeLivresDispo", livreServiceClient.listeLivresDisponibles(token) );
+        model.addAttribute("listeLivresDispo", livreServiceClient.findLivresByStockDisponibleDesc(token) );
 
         return "admin";
     }

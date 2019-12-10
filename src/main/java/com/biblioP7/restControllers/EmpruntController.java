@@ -30,8 +30,6 @@ public class EmpruntController {
 
     private static final Logger logger = LoggerFactory.getLogger(EmpruntController.class);
 
-
-
     @Autowired
     private EmpruntDao empruntDao;
 
@@ -104,7 +102,7 @@ public class EmpruntController {
         Membre membre = membreDao.findById(membreId);
         Livre livre = livreDao.findById(livreId);
 
-        if (!livre.isDisponible()){
+        if (livre.getStockDisponible()==0){
             //le livre n'est pas disponible, on ne peut pas l'emprunter !
             logger.error("Impossible de créer l'emprunt : Membre =" + membre.getEmail() + " Livre =" + livre.getId() );
             return null;
@@ -122,8 +120,8 @@ public class EmpruntController {
 
             empruntDao.save(nouvelEmprunt);
 
-            //passage et sauvegarde du livre en tant que non disponible (à modifier plus tard si nous gérons la quantité ?)
-            livre.setDisponible(false);
+            //l'emprunt est validé, on sauvegarde le livre en diminuant son stock de 1
+            livre.emprunterLivre();
             livreDao.save(livre);
             logger.warn(" [REST] Nouvel emprunt créé id = " + nouvelEmprunt.getId() + " membre = " + nouvelEmprunt.getMembre().getNom() + " livre = " + nouvelEmprunt.getLivre().getTitre() );
             return nouvelEmprunt;
@@ -192,7 +190,9 @@ public class EmpruntController {
 
         //on tope le livre à disponible = true
         Livre livreRendu = livreDao.findById(emprunt.getLivre().getId());
-        livreRendu.setDisponible(true);
+
+        //on remplit le stock du livre +1
+        livreRendu.restituerLivre();
 
         //on save les 2 entités livre / emprunt
         livreDao.save(livreRendu);

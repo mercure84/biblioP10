@@ -70,7 +70,7 @@
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th>Editeur</th>
-                <th>Disponible</th>
+                <th>Exemplaires disponibles</th>
 
             </tr>
             </thead>
@@ -79,8 +79,8 @@
                 <td th:text="${ligneL.getTitre()}">Nom Livre</td>
                 <td th:text="${ligneL.getAuteurNom() + ' ' + ligneL.getAuteurPrenom()}">Auteur</td>
                 <td th:text="${ligneL.getEditeur()}">Editeur</td>
-                <td th:text="${ligneL.isDisponible()?'Oui':'Non'}"
-                    th:style="${ligneL.isDisponible()? 'color:green':'color:red'}">Dispo</td>
+                <td th:text="${ligneL.getStockDisponible() > 0 ? ligneL.getStockDisponible() :'Aucun exemplaire'}"
+                    th:style="${ligneL.getStockDisponible() > 0 ? 'color:green':'color:red'}">Dispo</td>
             </tr>
             </tbody>
         </table>
@@ -100,7 +100,7 @@
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th>Editeur</th>
-                <th>Disponible</th>
+                <th>Nombre d'exemplaires dispo</th>
 
             </tr>
             </thead>
@@ -109,8 +109,7 @@
                 <td th:text="${ligneT.getTitre()}">Nom Livre</td>
                 <td th:text="${ligneT.getAuteurNom() + ' ' + ligneT.getAuteurPrenom()}">Auteur</td>
                 <td th:text="${ligneT.getEditeur()}">Editeur</td>
-                <td th:text="${ligneT.isDisponible()?'Oui':'Non'}"
-                    th:style="${ligneT.isDisponible()? 'color:green':'color:red'}">Dispo</td>            </tr>
+                <td th:text="${ligneT.getStockDisponible()}">Nombre d'exemplaires disponibles</td>            </tr>
             </tbody>
         </table>
 

@@ -8,12 +8,18 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface LivreDao extends JpaRepository<Livre, Integer>{
 
     Livre findById(int it);
-    List<Livre> findLivresByDisponibleIsTrueOrderById();
+
+
+    @Query("Select c from Livre c order by c.stockDisponible desc ")
+    List<Livre> livresParStockDispoDecroissant();
+
+    List<Livre> findLivresByStockDisponibleGreaterThan(int mini);
 
     @Query("Select c from Livre c where lower(unaccent(c.titre)) like ('%' || lower(unaccent(:titre)) || '%')")
     List<Livre> filtrerTitres(@Param("titre") String titre);
