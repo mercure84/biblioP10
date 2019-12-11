@@ -10,11 +10,14 @@ import java.util.List;
 @FeignClient(name="reservation-service", url="http://localhost:8080")
 public interface ReservationServiceClient {
 
-    @GetMapping(value="/api/listeReservations")
-    List<Reservation> listeReservations(@RequestHeader("Authorization") String token);
-
     @GetMapping(value="/api/listeReservationEnCours")
     List<Reservation> listeReservationsEnCours(@RequestHeader("Auhtorization") String token);
+
+    @GetMapping(value="/api/reservationMembre")
+    List<Reservation> listReservationMembre(@RequestHeader("Auhtorization") String token, Integer membreId);
+
+    @GetMapping(value="/api/creerReservation")
+    public Reservation creerReservation(@RequestHeader("Auhtorization") String token, Reservation reservation);
 
 
 

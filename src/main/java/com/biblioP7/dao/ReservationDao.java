@@ -1,6 +1,7 @@
 package com.biblioP7.dao;
 
 
+import com.biblioP7.beans.Membre;
 import com.biblioP7.beans.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,8 @@ import java.util.List;
 public interface ReservationDao extends JpaRepository<Reservation, Integer> {
 
     Reservation findById(int id);
+
+    List<Reservation> findAllByMembre(Membre membre);
 
     @Query("SELECT reservations FROM Reservation reservations WHERE reservations.isEnCours =?1 ORDER BY reservations.id")
     List<Reservation> findReservationsEncours(boolean isRendu);

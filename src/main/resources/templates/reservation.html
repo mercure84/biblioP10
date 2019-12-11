@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
+<div th:include="bootstrapcdn.html"/>
+<head>
+    <head>
+        <meta charset="utf-8">
+        <title>Reserver un livre indisponible</title>
+    </head>
+<body>
+
+<!-- nav bar -->
+<div th:include="navbar"/>
+
+<div class="container">
+    <div class="row" id="bandeau0">
+        <div class="col-md-12">
+            <h2>C'est nouveau !!! Reserver un livre indisponible !!! </h2>
+            <p>Votre bibliothèque vous offre la possibilité de réserver un livre indisponible ! Placez vous dans la file d'attente et attendez qu'un exemplaire soit restitué pour que l'ouvrage vous soit réservé pendant 48h</p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-10">
+
+            <p>Che(è)r(e) <span th:text="${membre.getPrenom() + ' ' + membre.getNom()}"></span> souhaitez vous entrer dans la file d'attente pour le livre
+
+            <span style="color:red" th:text="${livre.getTitre()}">  </span> ?</p>
+
+
+
+            <p>  <a th:href="${'client/reserverLivre?livreId=' + livre.getId()}"><button>OUI</button></a><span>       </span><a href="/client/recherche"><button>NON</button><a></a></p>
+
+            </a></div>
+    </div>
+
+
+</div>
+
+</body>
+<div th:include="jscdn.html"/>
+</html>

@@ -14,9 +14,9 @@ import java.util.List;
 
 
 @RestController
-public class MembreController {
+public class MembreControllerREST {
 
-    private static final Logger logger = LoggerFactory.getLogger(MembreController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MembreControllerREST.class);
 
 
 

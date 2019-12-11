@@ -67,8 +67,6 @@ public class AdminController {
         return "admin";
     }
 
-
-
     @GetMapping("/client/stopperEmprunt")
     public String stopperEmprunt(Model model, String empruntId, HttpSession session){
 

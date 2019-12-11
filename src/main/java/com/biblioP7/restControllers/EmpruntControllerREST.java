@@ -26,9 +26,9 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-public class EmpruntController {
+public class EmpruntControllerREST {
 
-    private static final Logger logger = LoggerFactory.getLogger(EmpruntController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmpruntControllerREST.class);
 
     @Autowired
     private EmpruntDao empruntDao;

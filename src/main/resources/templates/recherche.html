@@ -111,11 +111,15 @@
                 <td th:text="${ligneT.getTitre()}">Nom Livre</td>
                 <td th:text="${ligneT.getAuteurNom() + ' ' + ligneT.getAuteurPrenom()}">Auteur</td>
                 <td th:text="${ligneT.getEditeur()}">Editeur</td>
-                <td th:text="${ligneT.getStockDisponible()}">Nombre d'exemplaires disponibles</td>            </tr>
+                <td th:if="${ligneT.getStockDisponible() > 0}" th:text="${ligneT.getStockDisponible()}"
+                    style="color:green"></td>
+                <td th:if="${ligneT.getStockDisponible() == 0}">Aucune disponibilité : <a th:href="${'/client/reservation?livreId='+ ligneT.getId()}"><button>Réserver</button></a></td>          </tr>
             </tbody>
         </table>
 
 
     </div>
+
+</div>
 </body>
 </html>
