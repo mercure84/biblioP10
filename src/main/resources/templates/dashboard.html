@@ -42,7 +42,7 @@
                 </tr></thead>
                 <tbody>
                 <tr th:each="ligneE : ${listeEmprunts}" th:style="${ligneE.isRendu()}? 'color:red' : 'color:green'">
-                    <td th:text="${ligneE.getLivre().getTitre()}">Nom Topo</td>
+                    <td th:text="${ligneE.getLivre().getTitre()}">Nom Livre</td>
                     <td th:text="${#dates.format(ligneE.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
                     <td th:text="${#dates.format(ligneE.getFinDate(), 'dd-MM-yyyy')}">EndDate</td>
                     <td th:text="${ligneE.isRendu()? 'Oui' : 'Non'}">Rendu</td>
@@ -51,6 +51,34 @@
                 </tr>
                 </tbody>
             </table>
+
+
+
+
+        <h2>Mes réservations</h2>
+
+        <table style="margin-top: 10px" class="table">
+            <thead>
+            <tr><th>Livre</th>
+
+                <th>Date de début</th>
+                <th>Date fin</th>
+                <th>Annuler</th>
+
+
+            </tr></thead>
+            <tbody>
+            <tr th:each="ligneR : ${listeResa}" th:style="${ligneR.isEnCours()}? 'color:red' : 'color:green'">
+                <td th:text="${ligneR.getLivre().getTitre()}">Livre</td>
+                <td th:text="${#dates.format(ligneR.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
+                <td th:text="${#dates.format(ligneR.getFinDate(), 'dd-MM-yyyy')}">EndDate</td>
+                <td><a th:href="${'/client/annulerReservation?reservationId='+ ligneR.getId()}"><button th:if="${ligneR.isEnCours()}">Annuler</button></a><span th:if="${ligneR.isEnCours()}"></span></td>
+
+            </tr>
+            </tbody>
+        </table>
+
+
 
 
         </div>

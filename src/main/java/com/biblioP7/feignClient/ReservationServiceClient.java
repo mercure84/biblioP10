@@ -15,8 +15,8 @@ public interface ReservationServiceClient {
     @GetMapping(value="/api/listeReservationsEnCours")
     List<Reservation> listeReservationsEnCours(@RequestHeader("Authorization") String token);
 
-    @GetMapping(value="/api/reservationMembre")
-    List<Reservation> listeReservationMembre(@RequestHeader("Authorization") String token, Integer membreId);
+    @PostMapping(value="/api/listeReservationsMembre")
+    List<Reservation> listeReservationsMembre(@RequestHeader("Authorization") String token, @RequestBody Integer membreId);
 
     @PostMapping(value="/api/creerReservation")
     Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation);

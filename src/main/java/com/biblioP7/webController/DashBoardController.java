@@ -2,8 +2,10 @@ package com.biblioP7.webController;
 
 import com.biblioP7.beans.Emprunt;
 import com.biblioP7.beans.Membre;
+import com.biblioP7.beans.Reservation;
 import com.biblioP7.feignClient.EmpruntServiceClient;
 import com.biblioP7.feignClient.MembreServiceClient;
+import com.biblioP7.feignClient.ReservationServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class DashBoardController {
     @Autowired
     MembreServiceClient membreServiceClient;
 
+    @Autowired
+    ReservationServiceClient reservationServiceClient;
+
     private static final Logger logger = LoggerFactory.getLogger(DashBoardController.class);
 
 
@@ -33,8 +38,11 @@ public class DashBoardController {
         String email = session.getAttribute("membreEmail").toString();
         int id = Integer.parseInt(session.getAttribute("membreId").toString());
 
+        List<Reservation> listeResaMembre = reservationServiceClient.listeReservationsMembre(token, id)  ;
         Membre membre = membreServiceClient.dataMembre(token, email);
         List<Emprunt> listeEmprunts = empruntServiceClient.empruntsParMembre(token, id);
+
+        model.addAttribute("listeResa", listeResaMembre);
         model.addAttribute("membre", membre);
         model.addAttribute("listeEmprunts", listeEmprunts);
         return "dashboard";

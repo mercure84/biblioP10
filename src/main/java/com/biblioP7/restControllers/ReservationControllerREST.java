@@ -30,8 +30,8 @@ public class ReservationControllerREST {
     private ReservationDao reservationDao;
 
     @CrossOrigin("*")
-    @GetMapping(value="/api/reservationMembre")
-    List<Reservation> listReservationMembre(int membreId){
+    @PostMapping(value="/api/listeReservationsMembre")
+    public List<Reservation> listeReservationsMembre(@RequestHeader("Authorization") String token, @RequestBody int membreId){
         Membre membre = membreDao.findById(membreId);
         return  reservationDao.findAllByMembre(membre);
     }
