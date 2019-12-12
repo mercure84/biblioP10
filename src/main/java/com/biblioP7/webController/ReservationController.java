@@ -3,7 +3,6 @@ package com.biblioP7.webController;
 import com.biblioP7.beans.Livre;
 import com.biblioP7.beans.Membre;
 import com.biblioP7.beans.Reservation;
-import com.biblioP7.feignClient.EmpruntServiceClient;
 import com.biblioP7.feignClient.LivreServiceClient;
 import com.biblioP7.feignClient.MembreServiceClient;
 import com.biblioP7.feignClient.ReservationServiceClient;
@@ -51,7 +50,7 @@ public class ReservationController {
     }
 
     @GetMapping("/client/reserverLivre")
-    public String reserverLivre(HttpSession session, Model model, String livreId){
+    public String creerReservation(HttpSession session, Model model, String livreId){
 
         String token = session.getAttribute("token").toString();
         Livre livre = livreServiceClient.detailLivre(token, Integer.parseInt(livreId));
@@ -62,11 +61,7 @@ public class ReservationController {
         reservation.setMembre(membre);
         reservation.setLivre(livre);
         reservationServiceClient.creerReservation(token, reservation);
-
-
-
-
-        return "dashboard";
+        return "redirect:/client/dashboard";
     }
 
 

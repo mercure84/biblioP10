@@ -62,8 +62,6 @@ public class AdminController {
         empruntServiceClient.creerEmprunt(token, creationEmprunt);
         String message = "L'emprunt a bien été créé !";
         model.addAttribute("message", message);
-
-
         return "admin";
     }
 

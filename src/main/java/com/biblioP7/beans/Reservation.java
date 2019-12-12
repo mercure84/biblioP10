@@ -25,11 +25,11 @@ public class Reservation {
     @Column(name="fin_date")
     private Date finDate;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="membre_id")
     private Membre membre;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="livre_id")
     private Livre livre;
 

@@ -11,10 +11,7 @@ import com.biblioP7.security.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,34 +24,27 @@ public class ReservationControllerREST {
 
 
     @Autowired
-    private LivreDao livreDao;
-
-    @Autowired
     private MembreDao membreDao;
 
     @Autowired
     private ReservationDao reservationDao;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
+    @CrossOrigin("*")
     @GetMapping(value="/api/reservationMembre")
     List<Reservation> listReservationMembre(int membreId){
         Membre membre = membreDao.findById(membreId);
         return  reservationDao.findAllByMembre(membre);
     }
 
-    @GetMapping(value="/api/listeReservationEncours")
+    @CrossOrigin("*")
+    @GetMapping(value="/api/listeReservationsEnCours")
     public List<Reservation> listeReservationsEnCours(){
         return reservationDao.findReservationsEncours(true);
         }
 
-    @GetMapping(value="/api/creerReservation")
-    public Reservation creerReservation(@RequestBody Reservation reservation){
+    @CrossOrigin("*")
+    @PostMapping(value="/api/creerReservation")
+    public Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation){
 
         Date dateDebut = new Date();
         Calendar c = Calendar.getInstance();

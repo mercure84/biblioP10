@@ -18,6 +18,6 @@ public interface ReservationDao extends JpaRepository<Reservation, Integer> {
     List<Reservation> findAllByMembre(Membre membre);
 
     @Query("SELECT reservations FROM Reservation reservations WHERE reservations.isEnCours =?1 ORDER BY reservations.id")
-    List<Reservation> findReservationsEncours(boolean isRendu);
+    List<Reservation> findReservationsEncours(boolean isEncours);
 
 }
