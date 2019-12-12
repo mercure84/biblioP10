@@ -65,5 +65,29 @@ public class ReservationController {
     }
 
 
+    @GetMapping("client/annulerReservation")
+    public String afficherAnnulResa(HttpSession session, Model model, String resaId){
+
+        String token = session.getAttribute("token").toString();
+        Reservation reservation = reservationServiceClient.detailReservation(token, Integer.parseInt(resaId));
+        String email = session.getAttribute("membreEmail").toString();
+        Membre membre = membreServiceClient.dataMembre(token, email);
+
+        model.addAttribute("resaToCancel", reservation);
+        model.addAttribute("membre", membre);
+
+        return "annulerReservation";
+
+    }
+
+    @GetMapping("client/validerAnnulation")
+    public String validerAnnulation(HttpSession session, String resaId){
+        String token = session.getAttribute("token").toString();
+        reservationServiceClient.annulerReservation(token, Integer.parseInt(resaId));
+        return "redirect:/client/dashboard";
+    }
+
+
+
 
 }

@@ -49,7 +49,7 @@ public class ReservationControllerREST {
         Date dateDebut = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime((dateDebut));
-        c.add(Calendar.DATE, 28);
+        c.add(Calendar.DATE, 2);
         Date dateFin = c.getTime();
         reservation.setDebutDate(dateDebut);
         reservation.setFinDate(dateFin);
@@ -59,6 +59,20 @@ public class ReservationControllerREST {
 
 
     }
+
+    @GetMapping(value="/api/detailReservation")
+    public Reservation detailReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId){
+        Reservation reservation = reservationDao.findById(resaId);
+        return reservation;
+    }
+
+    @GetMapping(value="/api/annulerReservation")
+    public void annulerReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId){
+
+        Reservation reservation = reservationDao.findById(resaId);
+        reservation.setEnCours(false);
+        reservationDao.save(reservation);
+        }
 
 
 

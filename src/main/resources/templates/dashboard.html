@@ -72,7 +72,7 @@
                 <td th:text="${ligneR.getLivre().getTitre()}">Livre</td>
                 <td th:text="${#dates.format(ligneR.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
                 <td th:text="${#dates.format(ligneR.getFinDate(), 'dd-MM-yyyy')}">EndDate</td>
-                <td><a th:href="${'/client/annulerReservation?reservationId='+ ligneR.getId()}"><button th:if="${ligneR.isEnCours()}">Annuler</button></a><span th:if="${ligneR.isEnCours()}"></span></td>
+                <td><a th:href="${'/client/annulerReservation?resaId='+ ligneR.getId()}"><button th:if="${ligneR.isEnCours()}">Statut</button></a><span th:if="${!ligneR.isEnCours()}">Expirée</span></td>
 
             </tr>
             </tbody>
