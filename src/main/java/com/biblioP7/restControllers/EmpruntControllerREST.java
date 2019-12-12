@@ -76,7 +76,7 @@ public class EmpruntControllerREST {
 
         List<Emprunt> listeEmprunts = empruntDao.findEmpruntsByMembre(membre);
 
-        logger.warn("[REST] Une liste d'emprunt est demandée pour le membre " + membre.getEmail());
+        logger.info("[REST] Une liste d'emprunt est demandée pour le membre " + membre.getEmail());
 
         return listeEmprunts;
     }
@@ -123,7 +123,7 @@ public class EmpruntControllerREST {
             //l'emprunt est validé, on sauvegarde le livre en diminuant son stock de 1
             livre.emprunterLivre();
             livreDao.save(livre);
-            logger.warn(" [REST] Nouvel emprunt créé id = " + nouvelEmprunt.getId() + " membre = " + nouvelEmprunt.getMembre().getNom() + " livre = " + nouvelEmprunt.getLivre().getTitre() );
+            logger.info(" [REST] Nouvel emprunt créé id = " + nouvelEmprunt.getId() + " membre = " + nouvelEmprunt.getMembre().getNom() + " livre = " + nouvelEmprunt.getLivre().getTitre() );
             return nouvelEmprunt;
         }
 
@@ -166,7 +166,7 @@ public class EmpruntControllerREST {
 
             empruntAProlonger.setFinDate(dateFinBis);
             empruntDao.save(empruntAProlonger);
-            logger.warn("l'emprunt n° " + empruntAProlonger.getId() + " a bien été prolongé !");
+            logger.info("l'emprunt n° " + empruntAProlonger.getId() + " a bien été prolongé !");
             return empruntAProlonger;
 
         }}
@@ -198,7 +198,7 @@ public class EmpruntControllerREST {
         livreDao.save(livreRendu);
         empruntDao.save(emprunt);
 
-        logger.warn("Arrêt de l'emprunt " + emprunt.getId());
+        logger.info("Arrêt de l'emprunt " + emprunt.getId());
         return livreRendu;
 
 
@@ -241,7 +241,7 @@ public class EmpruntControllerREST {
                     } catch(Exception error){
             resultat = "Le batch a échoué !" + error;
         }
-        logger.warn(resultat);
+        logger.info(resultat);
         return resultat;
     }
 

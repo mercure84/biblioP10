@@ -61,18 +61,18 @@
             <thead>
             <tr><th>Livre</th>
 
-                <th>Date de début</th>
-                <th>Date fin</th>
-                <th>Annuler</th>
+                <th>Vous l'attendez depuis ...</th>
+                <th>Début de l'option 48h</th>
+                <th>Statut</th>
 
 
             </tr></thead>
             <tbody>
-            <tr th:each="ligneR : ${listeResa}" th:style="${ligneR.isEnCours()}? 'color:red' : 'color:green'">
+            <tr th:each="ligneR : ${listeResa}" th:style="${ligneR.isEncours()}? 'color:red' : 'color:green'">
                 <td th:text="${ligneR.getLivre().getTitre()}">Livre</td>
-                <td th:text="${#dates.format(ligneR.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
-                <td th:text="${#dates.format(ligneR.getFinDate(), 'dd-MM-yyyy')}">EndDate</td>
-                <td><a th:href="${'/client/annulerReservation?resaId='+ ligneR.getId()}"><button th:if="${ligneR.isEnCours()}">Statut</button></a><span th:if="${!ligneR.isEnCours()}">Expirée</span></td>
+                <td th:text="${#dates.format(ligneR.getDateDemande(), 'dd-MM-yyyy')}">Demande Date</td>
+                <td><span th:if="${ligneR.getDateDebut()!=null}" th:text="${#dates.format(ligneR.getDateDebut(), 'dd-MM-yyyy')}">Start Option</span></td>
+                <td><a th:href="${'/client/annulerReservation?resaId='+ ligneR.getId()}"><button th:if="${ligneR.isEncours()}">Annuler</button></a><span th:if="${!ligneR.isEncours()}">Expirée</span></td>
 
             </tr>
             </tbody>

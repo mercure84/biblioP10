@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name="reservation")
+@Table(name= "reservation")
 @AllArgsConstructor @NoArgsConstructor
 public class Reservation {
 
@@ -19,11 +19,14 @@ public class Reservation {
     @Column(name="id", nullable= false, unique = true)
     private int id;
 
-    @Column(name="debut_date")
-    private Date debutDate;
+    @Column(name="date_demande")
+    private Date dateDemande;
 
-    @Column(name="fin_date")
-    private Date finDate;
+    @Column(name= "date_debut")
+    private Date dateDebut;
+
+    @Column(name= "date_fin")
+    private Date dateFin;
 
     @ManyToOne()
     @JoinColumn(name="membre_id")
@@ -33,8 +36,9 @@ public class Reservation {
     @JoinColumn(name="livre_id")
     private Livre livre;
 
-    @Column(name="en_cours")
-    private boolean isEnCours;
+    //"En cours" ou "Expirée" ou "Annulée" ou "Exercée"
+    @Column(name= "en_cours")
+    private boolean isEncours;
 
 
     public int getId() {
@@ -45,21 +49,31 @@ public class Reservation {
         this.id = id;
     }
 
-    public Date getDebutDate() {
-        return debutDate;
+    public Date getDateDebut() {
+        return dateDebut;
     }
 
-    public void setDebutDate(Date debutDate) {
-        this.debutDate = debutDate;
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
-    public Date getFinDate() {
-        return finDate;
+    public Date getDateFin() {
+        return dateFin;
     }
 
-    public void setFinDate(Date finDate) {
-        this.finDate = finDate;
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
     }
+
+    public Date getDateDemande() {
+        return dateDemande;
+    }
+
+    public void setDateDemande(Date dateDemande) {
+        this.dateDemande = dateDemande;
+    }
+
+
 
     public Membre getMembre() {
         return membre;
@@ -77,11 +91,11 @@ public class Reservation {
         this.livre = livre;
     }
 
-    public boolean isEnCours() {
-        return isEnCours;
+    public boolean isEncours() {
+        return isEncours;
     }
 
-    public void setEnCours(boolean enCours) {
-        isEnCours = enCours;
+    public void setEncours(boolean encours) {
+        isEncours = encours;
     }
 }

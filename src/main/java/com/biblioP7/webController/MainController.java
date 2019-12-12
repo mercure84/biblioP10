@@ -28,6 +28,8 @@ public class MainController {
     @GetMapping(value="/client")
     public String index (HttpSession session, Model model){
 
+
+
         // on passe quelques données sur la bdd une fois que le membre est connecté
         Map<String, Integer> compterLivres = livreServiceClient.nbLivres();
 

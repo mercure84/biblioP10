@@ -27,7 +27,7 @@
             <p>Che(è)r(e) <span th:text="${membre.getPrenom() + ' ' + membre.getNom()}"></span> : confirmez vous l'annulation de la réservation suivante </p>
 
                 <p>Livre : <span style="color:red" th:text="${resaToCancel.getLivre().getTitre()}">  </span></p>
-                <p>Date initiale de réservation : <span th:text="${#dates.format(resaToCancel.getDebutDate(), 'dd-MM-yyyy')}"></span></p>
+                <p>Date initiale de réservation : <span th:text="${#dates.format(resaToCancel.getDateDebut(), 'dd-MM-yyyy')}"></span></p>
 
 
             <p>  <a th:href="${'validerAnnulation?resaId=' + resaToCancel.getId()}"><button>OUI</button></a><span>       </span><a href="/client/recherche"><button>NON</button></a></p>

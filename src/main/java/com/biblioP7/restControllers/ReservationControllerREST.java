@@ -46,14 +46,11 @@ public class ReservationControllerREST {
     @PostMapping(value="/api/creerReservation")
     public Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation){
 
-        Date dateDebut = new Date();
+        Date dateDemande = new Date();
         Calendar c = Calendar.getInstance();
-        c.setTime((dateDebut));
-        c.add(Calendar.DATE, 2);
-        Date dateFin = c.getTime();
-        reservation.setDebutDate(dateDebut);
-        reservation.setFinDate(dateFin);
-        reservation.setEnCours(true);
+        c.setTime((dateDemande));
+        reservation.setDateDemande(dateDemande);
+        reservation.setEncours(true);
         reservationDao.save(reservation);
         return reservation;
 
@@ -70,7 +67,7 @@ public class ReservationControllerREST {
     public void annulerReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId){
 
         Reservation reservation = reservationDao.findById(resaId);
-        reservation.setEnCours(false);
+        reservation.setEncours(false);
         reservationDao.save(reservation);
         }
 
