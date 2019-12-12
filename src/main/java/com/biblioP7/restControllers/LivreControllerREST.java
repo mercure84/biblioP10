@@ -41,8 +41,8 @@ public class LivreControllerREST {
     @RequestMapping(value="/api/Livre/nbLivres", method= RequestMethod.GET)
     public Map<String, Integer> nbLivres(){
         Map<String, Integer> resultat = new HashMap<>();
-        int nbLivres = livreDao.findAll().size();
-        int nbLivresDispo = livreDao.findLivresByStockDisponibleGreaterThan(0).size();
+        int nbLivres = livreDao.calculerStockTotal();
+        int nbLivresDispo = livreDao.calculerStockDispo();
 
         resultat.put("nbLivres", nbLivres);
         resultat.put("nbLivresDispo", nbLivresDispo);

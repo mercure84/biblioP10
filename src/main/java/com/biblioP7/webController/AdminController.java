@@ -4,9 +4,11 @@ package com.biblioP7.webController;
 import com.biblioP7.beans.CreationEmprunt;
 import com.biblioP7.beans.Emprunt;
 import com.biblioP7.beans.Livre;
+import com.biblioP7.beans.Reservation;
 import com.biblioP7.feignClient.EmpruntServiceClient;
 import com.biblioP7.feignClient.LivreServiceClient;
 import com.biblioP7.feignClient.MembreServiceClient;
+import com.biblioP7.feignClient.ReservationServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class AdminController {
     @Autowired
     LivreServiceClient livreServiceClient;
 
+    @Autowired
+    ReservationServiceClient reservationServiceClient;
+
     @GetMapping("/client/admin")
     public String afficherPageAdmin(HttpSession session, Model model, String batchMessage){
 
@@ -46,6 +51,11 @@ public class AdminController {
 
         //on charge la liste des emprunts en cours
         List<Emprunt> empruntsEnCours = empruntServiceClient.listeEmpruntsEncours(token);
+
+        //on charge la liste des résa en cours
+        List<Reservation> resaEncours = reservationServiceClient.listeReservationsEnCours(token);
+
+        model.addAttribute("resaEncours", resaEncours);
         model.addAttribute("empruntsEncours", empruntsEnCours);
         model.addAttribute("creationEmprunt", new CreationEmprunt());
         model.addAttribute("listeMembre", membreServiceClient.listeMembres(token));

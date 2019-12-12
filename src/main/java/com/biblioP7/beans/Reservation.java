@@ -36,10 +36,19 @@ public class Reservation {
     @JoinColumn(name="livre_id")
     private Livre livre;
 
-    //"En cours" ou "Expirée" ou "Annulée" ou "Exercée"
     @Column(name= "en_cours")
     private boolean isEncours;
 
+    @Column(name="detail")
+    private String detail;
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
 
     public int getId() {
         return id;

@@ -15,11 +15,24 @@ public interface LivreDao extends JpaRepository<Livre, Integer>{
 
     Livre findById(int it);
 
-
-    @Query("Select c from Livre c order by c.stockDisponible desc ")
-    List<Livre> livresParStockDispoDecroissant();
-
     List<Livre> findLivresByStockDisponibleGreaterThan(int mini);
+
+
+    // requêtes de calculs
+
+    @Query("Select sum(c.stockTotal) from Livre c")
+    int calculerStockTotal();
+
+
+    @Query("Select sum(c.stockDisponible) from Livre c")
+    int calculerStockDispo();
+
+
+
+
+
+
+    // requetes pour la recherche
 
     @Query("Select c from Livre c where lower(unaccent(c.titre)) like ('%' || lower(unaccent(:titre)) || '%')")
     List<Livre> filtrerTitres(@Param("titre") String titre);
@@ -29,5 +42,8 @@ public interface LivreDao extends JpaRepository<Livre, Integer>{
 
     @Query("Select c from Livre c where lower(unaccent(c.editeur)) like ('%' || lower(unaccent(:editeur)) || '%')")
     List<Livre> filtrerEditeurs(@Param("editeur") String editeur);
+
+
+
 
 }
