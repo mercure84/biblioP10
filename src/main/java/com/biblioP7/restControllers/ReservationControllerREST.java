@@ -3,6 +3,7 @@ package com.biblioP7.restControllers;
 
 import com.biblioP7.beans.Livre;
 import com.biblioP7.beans.Membre;
+import com.biblioP7.beans.ResaPosition;
 import com.biblioP7.beans.Reservation;
 import com.biblioP7.dao.LivreDao;
 import com.biblioP7.dao.MembreDao;
@@ -66,17 +67,18 @@ public class ReservationControllerREST {
     }
 
     @GetMapping(value="/api/annulerReservation")
-    public void annulerReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId){
+    public void annulerReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId, @RequestParam String detail){
 
         Reservation reservation = reservationDao.findById(resaId);
         reservation.setEncours(false);
+        reservation.setDetail(detail);
         reservationDao.save(reservation);
         }
 
     int positionResaMembre(int livreId, int membreId){
-        int position = 0;
+        int position = 1;
         // récupération de la liste des résa pour le livre donné
-        List<Reservation> listeResa = reservationDao.findAllByLivreOrderById(livreDao.findById(livreId));
+        List<Reservation> listeResa = reservationDao.trouverResaEncoursParLivre(livreDao.findById(livreId));
 
         for (Reservation resa : listeResa
              ) {
@@ -86,17 +88,17 @@ public class ReservationControllerREST {
     }
 
     @PostMapping(value="/api/listeResaMembrePositions")
-    Map<Integer, Reservation> listeResaMembrePositions (@RequestHeader("Authorization") String token, @RequestBody Membre membre){
-    Map<Integer, Reservation> listeResaMembre = new HashMap<Integer, Reservation>();
-
+    List<ResaPosition> listeResaPositions (@RequestHeader("Authorization") String token, @RequestBody Membre membre){
+    List<ResaPosition> listeResaMembre = new ArrayList<ResaPosition>();
     List<Reservation> listeResa = reservationDao.findAllByMembre(membre);
 
         for (Reservation resa : listeResa
              ) {
-
-            int position = this.positionResaMembre(resa.getLivre().getId(), membre.getId());
-            listeResaMembre.put(position, resa);
-        }
+            int position = 0;
+            if (resa.isEncours()){
+            position = this.positionResaMembre(resa.getLivre().getId(), membre.getId());}
+            listeResaMembre.add(new ResaPosition(resa, position));
+            }
 //        System.out.println("Liste resa avec position = " + listeResaMembre);
         return listeResaMembre;
 

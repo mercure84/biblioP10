@@ -83,7 +83,7 @@ public class ReservationController {
     @GetMapping("client/validerAnnulation")
     public String validerAnnulation(HttpSession session, String resaId){
         String token = session.getAttribute("token").toString();
-        reservationServiceClient.annulerReservation(token, Integer.parseInt(resaId));
+        reservationServiceClient.annulerReservation(token, Integer.parseInt(resaId), "Annulée par le membre");
         return "redirect:/client/dashboard";
     }
 

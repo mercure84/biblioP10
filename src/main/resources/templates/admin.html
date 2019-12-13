@@ -93,33 +93,6 @@
                     </div></div></div>
             <p></p>
 
-            <h2>Réservations en attentes</h2>
-
-            <table style="margin-top: 10px" class="table">
-                <thead>
-                <tr>
-                    <th>Résa n° </th>
-                    <th>Date demande</th>
-                    <th>Titre Livre + ISBN</th>
-                    <th>Membre</th>
-                    <th>Statut</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="ligneR : ${resaEncours}">
-                    <td th:text="${ligneR.getId()}">Résa Id</td>
-                    <td th:text="${#dates.format(ligneR.getDateDemande(), 'dd-MM-yyyy')}">StartDate</td>
-                    <td th:text="${ligneR.getLivre().getTitre() + ' ' + ligneR.getLivre().getIsbn()}">Book</td>
-                    <td th:text="${ligneR.membre.getPrenom() + ' ' + ligneR.getMembre().getNom()}">Membre</td>
-
-                    <td></td>
-
-                </tr>
-                </tbody>
-            </table>
-
-            <p></p>
-
 
         <h2>Restituer un emprunt : </h2>
 
@@ -148,6 +121,31 @@
             </tbody>
         </table>
 
+            <h2>Réservations en attentes</h2>
+
+            <table style="margin-top: 10px" class="table">
+                <thead>
+                <tr>
+                    <th>Résa n° </th>
+                    <th>Date demande</th>
+                    <th>Titre Livre + ISBN</th>
+                    <th>Membre</th>
+                    <th>Statut</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ligneR : ${resaEncours}">
+                    <td th:text="${ligneR.getId()}">Résa Id</td>
+                    <td th:text="${#dates.format(ligneR.getDateDemande(), 'dd-MM-yyyy')}">StartDate</td>
+                    <td th:text="${ligneR.getLivre().getTitre() + ' ' + ligneR.getLivre().getIsbn()}">Book</td>
+                    <td th:text="${ligneR.membre.getPrenom() + ' ' + ligneR.getMembre().getNom()}">Membre</td>
+                    <td th:text="${ligneR.getDetail()}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+
+            <p></p>
 
 
 
