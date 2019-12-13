@@ -41,7 +41,7 @@ public class MainController {
     }
 
     @GetMapping(value="/client/error")
-    public String error(){
+    public String error(Model model){
 
 
         return "error";

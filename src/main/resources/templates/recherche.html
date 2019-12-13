@@ -77,12 +77,11 @@
             <tbody>
             <tr th:each="ligneL : ${resultat}">
                 <td th:text="${ligneL.getTitre()}">Nom Livre</td>
-                <td th:text="${ligneL.getAuteurNom() + ' ' + ligneL.getAuteurPrenom()}">Auteur</td>
+                <td th:text="${ligneL.getAuteurNom()}">Auteur</td>
                 <td th:text="${ligneL.getEditeur()}">Editeur</td>
                 <td th:if="${ligneL.getStockDisponible() > 0}" th:text="${ligneL.getStockDisponible()}"
                     style="color:green"></td>
-                <td th:if="${ligneL.getStockDisponible() == 0}">Aucune disponibilité : <button>Réserver</button></td>
-
+                <td th:if="${ligneL.getStockDisponible() == 0}">Aucune disponibilité : <a th:href="${'/client/reservation?livreId='+ ligneL.getId()}"><button>Réserver</button></a></td>
             </tr>
             </tbody>
         </table>
@@ -109,7 +108,7 @@
             <tbody>
             <tr th:each="ligneT : ${allBooks}">
                 <td th:text="${ligneT.getTitre()}">Nom Livre</td>
-                <td th:text="${ligneT.getAuteurNom() + ' ' + ligneT.getAuteurPrenom()}">Auteur</td>
+                <td th:text="${ligneT.getAuteurNom()}">Auteur</td>
                 <td th:text="${ligneT.getEditeur()}">Editeur</td>
                 <td th:if="${ligneT.getStockDisponible() > 0}" th:text="${ligneT.getStockDisponible()}"
                     style="color:green"></td>

@@ -14,6 +14,7 @@
 <div class=="row">
     <div style="text-align: center" class="col-md-12" id="bandeau0">
         <h1> Oups..... ! Une erreur est arrivée !</h1>
+        <h1 th:if="${erreurMessage != null}" th:text="${erreurMessage}"></h1>
         
         
         <img src="../img/livre-feu.jpg">

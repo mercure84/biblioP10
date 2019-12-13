@@ -1,13 +1,12 @@
 package com.biblioP7.restControllers;
 
 
-import com.biblioP7.beans.Livre;
-import com.biblioP7.beans.Membre;
-import com.biblioP7.beans.ResaPosition;
-import com.biblioP7.beans.Reservation;
+import com.biblioP7.beans.*;
+import com.biblioP7.dao.EmpruntDao;
 import com.biblioP7.dao.LivreDao;
 import com.biblioP7.dao.MembreDao;
 import com.biblioP7.dao.ReservationDao;
+import com.biblioP7.exception.FunctionalException;
 import com.biblioP7.security.JwtTokenUtil;
 import com.biblioP7.security.UserDetailsServiceImpl;
 import org.slf4j.Logger;
@@ -32,6 +31,9 @@ public class ReservationControllerREST {
     @Autowired
     private LivreDao livreDao;
 
+    @Autowired
+    private EmpruntDao empruntDao;
+
     @CrossOrigin("*")
     @PostMapping(value="/api/listeReservationsMembre")
     public List<Reservation> listeReservationsMembre(@RequestHeader("Authorization") String token, @RequestBody int membreId){
@@ -47,15 +49,42 @@ public class ReservationControllerREST {
 
     @CrossOrigin("*")
     @PostMapping(value="/api/creerReservation")
-    public Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation){
+    public Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation) throws FunctionalException {
 
-        Date dateDemande = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime((dateDemande));
-        reservation.setDateDemande(dateDemande);
-        reservation.setEncours(true);
-        reservationDao.save(reservation);
-        return reservation;
+
+        // RG : on peut réserver le livre uniquement si la liste n'est pas pleine à savoir nbResa du livre < 2 x stock total
+        int nbResaLivre = reservationDao.trouverResaEncoursParLivre(reservation.getLivre()).size();
+        if (nbResaLivre >= reservation.getLivre().getStockTotal()){
+            throw new FunctionalException("Le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé, trop d'exemlaires demandés");
+
+        }
+
+            //RG : on peut réserver le livre uniquement si on ne l'a déjà pas en cours d'emprunt et si on ne l'a pas déjà en cours de réservation
+            List<Reservation> listeResaMembre = reservationDao.trouverResaEncoursParMembre(reservation.getMembre());
+            List<Emprunt> listeEmpruntMembre = empruntDao.trouverEmpruntEncoursParMembre(reservation.getMembre());
+
+            for (Reservation resa : listeResaMembre
+            ) {
+                if (resa.getLivre().equals(reservation.getLivre())) {
+                    throw new FunctionalException("le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé, car le membre a déjà une réservation en cours pour cet ouvrage");
+
+
+                }
+            }
+            for (Emprunt emprunt : listeEmpruntMembre) {
+                if (emprunt.getLivre().equals(reservation.getLivre())) {
+                    throw new FunctionalException("le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé car le membre a déjà un emprunt en cours pour cet ouvrage");
+                }
+            }
+
+
+            Date dateDemande = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime((dateDemande));
+            reservation.setDateDemande(dateDemande);
+            reservation.setEncours(true);
+            reservationDao.save(reservation);
+            return reservation;
 
 
     }

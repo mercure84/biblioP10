@@ -4,6 +4,7 @@ import com.biblioP7.beans.Livre;
 import com.biblioP7.beans.Membre;
 import com.biblioP7.beans.ResaPosition;
 import com.biblioP7.beans.Reservation;
+import com.biblioP7.exception.FunctionalException;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public interface ReservationServiceClient {
     List<Reservation> listeReservationsMembre(@RequestHeader("Authorization") String token, @RequestBody int membreId);
 
     @PostMapping(value="/api/creerReservation")
-    Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation);
+    Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation) throws FunctionalException;
 
     @GetMapping(value="/api/detailReservation")
     Reservation detailReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId);
