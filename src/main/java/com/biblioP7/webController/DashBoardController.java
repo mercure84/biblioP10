@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -33,8 +34,14 @@ public class DashBoardController {
         String email = session.getAttribute("membreEmail").toString();
         int id = Integer.parseInt(session.getAttribute("membreId").toString());
 
+        Date today = new Date();
+
         Membre membre = membreServiceClient.dataMembre(token, email);
         List<Emprunt> listeEmprunts = empruntServiceClient.empruntsParMembre(token, id);
+
+        // on adresse la date today au front pour un contrôle sur la possibilité de prolonger l'emprunt
+        model.addAttribute("today", today);
+
         model.addAttribute("membre", membre);
         model.addAttribute("listeEmprunts", listeEmprunts);
         return "dashboard";
