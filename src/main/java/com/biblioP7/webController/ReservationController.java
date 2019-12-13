@@ -61,18 +61,17 @@ public class ReservationController {
         Reservation reservation = new Reservation();
         reservation.setMembre(membre);
         reservation.setLivre(livre);
+        reservation.setDetail("en cours");
         try {
             reservationServiceClient.creerReservation(token, reservation);
             return "redirect:/client/dashboard";
 
         } catch (FunctionalException e) {
-            e.printStackTrace();
-            model.addAttribute("erreurMessage", e.toString());
+            model.addAttribute("erreurMessage", "La reservation n'est pas possible :  " + e.toString());
             return "error";
 
         }
     }
-
 
     @GetMapping("client/annulerReservation")
     public String afficherAnnulResa(HttpSession session, Model model, String resaId){

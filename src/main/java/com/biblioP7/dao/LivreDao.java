@@ -28,10 +28,6 @@ public interface LivreDao extends JpaRepository<Livre, Integer>{
     int calculerStockDispo();
 
 
-
-
-
-
     // requetes pour la recherche
 
     @Query("Select c from Livre c where lower(unaccent(c.titre)) like ('%' || lower(unaccent(:titre)) || '%')")

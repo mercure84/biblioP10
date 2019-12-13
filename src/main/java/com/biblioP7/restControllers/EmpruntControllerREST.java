@@ -1,13 +1,11 @@
 package com.biblioP7.restControllers;
 
 
-import com.biblioP7.beans.Emprunt;
-import com.biblioP7.beans.Livre;
-import com.biblioP7.beans.Membre;
+import com.biblioP7.beans.*;
 import com.biblioP7.dao.EmpruntDao;
 import com.biblioP7.dao.LivreDao;
 import com.biblioP7.dao.MembreDao;
-import com.biblioP7.beans.CreationEmprunt;
+import com.biblioP7.dao.ReservationDao;
 import com.biblioP7.security.JwtTokenUtil;
 import com.biblioP7.security.UserDetailsServiceImpl;
 import org.slf4j.Logger;
@@ -38,6 +36,9 @@ public class EmpruntControllerREST {
 
     @Autowired
     private LivreDao livreDao ;
+
+    @Autowired
+    private ReservationDao reservationDao;
 
 
     // on va utiliser cette classe utilitaire pour parser le token reçu, notamment pour la méthode prolongerEmprunt
@@ -189,19 +190,35 @@ public class EmpruntControllerREST {
         emprunt.setFinDate(new Date());
         emprunt.setRendu(true);
 
-        //on tope le livre à disponible = true
+
+        //RG un livre est rendu, avant de le rentrer en stock on regarde si une réservation peut être servie
         Livre livreRendu = livreDao.findById(emprunt.getLivre().getId());
 
-        //on remplit le stock du livre +1
-        livreRendu.restituerLivre();
+        List<Reservation> listResaLivre = reservationDao.trouverResaEncoursParLivre(livreRendu);
 
-        //on save les 2 entités livre / emprunt
-        livreDao.save(livreRendu);
-        empruntDao.save(emprunt);
+        if (listResaLivre.size() > 0){
+            // on prends le premier membre de la liste des résa en cours pour ce livre et on lui écrir un email
+            Reservation resaGagnante = listResaLivre.get(0) ;
+            resaGagnante.setDetail("Livre disponible");
 
-        logger.info("Arrêt de l'emprunt " + emprunt.getId());
-        return livreRendu;
+            Livre livreGagnant = resaGagnante.getLivre();
+            Membre membreGagnant = resaGagnante.getMembre();
 
+            return null;
+
+        } else {
+
+
+            //on remplit le stock du livre +1
+            livreRendu.restituerLivre();
+
+            //on save les 2 entités livre / emprunt
+            livreDao.save(livreRendu);
+            empruntDao.save(emprunt);
+
+            logger.info("Arrêt de l'emprunt " + emprunt.getId());
+            return livreRendu;
+        }
 
     }
 

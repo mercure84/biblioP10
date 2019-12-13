@@ -54,7 +54,7 @@ public class ReservationControllerREST {
 
         // RG : on peut réserver le livre uniquement si la liste n'est pas pleine à savoir nbResa du livre < 2 x stock total
         int nbResaLivre = reservationDao.trouverResaEncoursParLivre(reservation.getLivre()).size();
-        if (nbResaLivre >= reservation.getLivre().getStockTotal()){
+        if (nbResaLivre >=(reservation.getLivre().getStockTotal() * 2)){
             throw new FunctionalException("Le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé, trop d'exemlaires demandés");
 
         }
