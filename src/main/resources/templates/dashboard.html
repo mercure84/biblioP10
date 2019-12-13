@@ -46,7 +46,14 @@
                     <td th:text="${#dates.format(ligneE.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
                     <td th:text="${#dates.format(ligneE.getFinDate(), 'dd-MM-yyyy')}">EndDate</td>
                     <td th:text="${ligneE.isRendu()? 'Oui' : 'Non'}">Rendu</td>
-                    <td><a th:href="${'/client/prolongerEmprunt?empruntId='+ ligneE.getId()}"><button th:if="${!(ligneE.isProlonge()||ligneE.isRendu())}">+ 4 semaines</button></a><span th:if="${(ligneE.isProlonge()||ligneE.isRendu())}">Impossible</span></td>
+
+<!--                    vérification côté front end de la possibilité de prolonger l'emprunt : -->
+<!--                    on vérifie si le prêt a déjà été prolongé-->
+<!--                    on vérifie sur le prêt a été rendu
+                           on vérifie que la date d'échéance initiale n'a pas été dépassée -->
+
+
+                    <td><a th:href="${'/client/prolongerEmprunt?empruntId='+ ligneE.getId()}"><button th:if="${!(ligneE.isProlonge()||ligneE.isRendu()||ligneE.getFinDate().before(today))}">+ 4 semaines</button></a><span th:if="${(ligneE.isProlonge()||ligneE.isRendu())}">Impossible</span></td>
 
                 </tr>
                 </tbody>
