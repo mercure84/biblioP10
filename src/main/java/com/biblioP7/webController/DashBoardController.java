@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class DashBoardController {
@@ -38,11 +39,12 @@ public class DashBoardController {
         String email = session.getAttribute("membreEmail").toString();
         int id = Integer.parseInt(session.getAttribute("membreId").toString());
 
-        List<Reservation> listeResaMembre = reservationServiceClient.listeReservationsMembre(token, id)  ;
         Membre membre = membreServiceClient.dataMembre(token, email);
         List<Emprunt> listeEmprunts = empruntServiceClient.empruntsParMembre(token, id);
 
-        model.addAttribute("listeResa", listeResaMembre);
+        Map<Integer, Reservation> listeResaPosition = reservationServiceClient.listeResaMembrePositions(token, membre);
+
+        model.addAttribute("listeResa", listeResaPosition);
         model.addAttribute("membre", membre);
         model.addAttribute("listeEmprunts", listeEmprunts);
         return "dashboard";

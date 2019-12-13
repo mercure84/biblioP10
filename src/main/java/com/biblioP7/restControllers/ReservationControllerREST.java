@@ -1,6 +1,7 @@
 package com.biblioP7.restControllers;
 
 
+import com.biblioP7.beans.Livre;
 import com.biblioP7.beans.Membre;
 import com.biblioP7.beans.Reservation;
 import com.biblioP7.dao.LivreDao;
@@ -13,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class ReservationControllerREST {
@@ -28,6 +27,9 @@ public class ReservationControllerREST {
 
     @Autowired
     private ReservationDao reservationDao;
+
+    @Autowired
+    private LivreDao livreDao;
 
     @CrossOrigin("*")
     @PostMapping(value="/api/listeReservationsMembre")
@@ -70,6 +72,35 @@ public class ReservationControllerREST {
         reservation.setEncours(false);
         reservationDao.save(reservation);
         }
+
+    int positionResaMembre(int livreId, int membreId){
+        int position = 0;
+        // récupération de la liste des résa pour le livre donné
+        List<Reservation> listeResa = reservationDao.findAllByLivreOrderById(livreDao.findById(livreId));
+
+        for (Reservation resa : listeResa
+             ) {
+            position = (resa.getMembre().getId() == membreId ? position : position +1);
+            }
+        return position;
+    }
+
+    @PostMapping(value="/api/listeResaMembrePositions")
+    Map<Integer, Reservation> listeResaMembrePositions (@RequestHeader("Authorization") String token, @RequestBody Membre membre){
+    Map<Integer, Reservation> listeResaMembre = new HashMap<Integer, Reservation>();
+
+    List<Reservation> listeResa = reservationDao.findAllByMembre(membre);
+
+        for (Reservation resa : listeResa
+             ) {
+
+            int position = this.positionResaMembre(resa.getLivre().getId(), membre.getId());
+            listeResaMembre.put(position, resa);
+        }
+//        System.out.println("Liste resa avec position = " + listeResaMembre);
+        return listeResaMembre;
+
+    }
 
 
 

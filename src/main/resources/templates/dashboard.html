@@ -69,12 +69,12 @@
 
             </tr></thead>
             <tbody>
-            <tr th:each="ligneR : ${listeResa}" th:style="${ligneR.isEncours()}? 'color:red' : 'color:green'">
-                <td th:text="${ligneR.getLivre().getTitre()}">Livre</td>
-                <td th:text="${#dates.format(ligneR.getDateDemande(), 'dd-MM-yyyy')}">Demande Date</td>
-                <td>XX</td>
-                <td><span th:if="${ligneR.getDateDebut()!=null}" th:text="${#dates.format(ligneR.getDateDebut(), 'dd-MM-yyyy')}">Start Option</span></td>
-                <td><a th:href="${'/client/annulerReservation?resaId='+ ligneR.getId()}"><button th:if="${ligneR.isEncours()}">Annuler</button></a><span th:if="${!ligneR.isEncours()}">Expirée</span></td>
+            <tr th:each="resa : ${listeResa}">
+                <td th:text="${resa.value.getLivre().getTitre()}">Livre</td>
+                <td th:text="${#dates.format(resa.value.getDateDemande(), 'dd-MM-yyyy')}">Demande Date</td>
+                <td th:text="${resa.getKey()}">XX</td>
+                <td><span th:if="${resa.value.getDateDebut()!=null}" th:text="${#dates.format(resa.value.getDateDebut(), 'dd-MM-yyyy')}">Start Option</span></td>
+                <td><a th:href="${'/client/annulerReservation?resaId='+ resa.value.getId()}"><button th:if="${resa.value.isEncours()}">Annuler</button></a><span th:if="${!resa.value.isEncours()}">Expirée</span></td>
 
             </tr>
             </tbody>
