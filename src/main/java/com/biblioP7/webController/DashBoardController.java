@@ -64,7 +64,6 @@ public class DashBoardController {
 
         try {
             empruntServiceClient.prolongerEmprunt(token, Integer.valueOf(empruntId));
-            logger.info("Prolongation OK pour l'emprunt n°" + empruntId);
             return "redirect:/client/dashboard";
 
         } catch (Exception e) {

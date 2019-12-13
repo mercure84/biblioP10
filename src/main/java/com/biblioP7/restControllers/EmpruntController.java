@@ -151,8 +151,9 @@ public class EmpruntController {
 
         if (isTokenValide){
 
+// CONTROLE BACKEND DE LA POSSIBILITE DE PROLONGER LEMPRUNT
 
-        if(empruntAProlonger.isProlonge()){
+        if(empruntAProlonger.isProlonge() || empruntAProlonger.getFinDate().before(new Date()) || empruntAProlonger.isRendu()){
             logger.info("impossible de prolonger l'emprunt " + empruntAProlonger.getId());
             return null;
 
