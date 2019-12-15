@@ -21,6 +21,7 @@ public class ReservationControllerREST {
 
     //private static final Logger logger = LoggerFactory.getLogger(EmpruntController.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(MembreControllerREST.class);
 
     @Autowired
     private MembreDao membreDao;
@@ -99,6 +100,15 @@ public class ReservationControllerREST {
     public void annulerReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId, @RequestParam String detail){
 
         Reservation reservation = reservationDao.findById(resaId);
+        // si nous sommes dans les 48h d'une option il faut aussi remettre l livre en stock
+        if (reservation.getDateFin()  != null){
+            Livre livreLibere = reservation.getLivre();
+            livreLibere.restituerLivre();
+            livreDao.save(livreLibere);
+            logger.info("Une option a été annulée et une copie du livre " +livreLibere.getTitre()+ " + est remis en stock");
+
+        }
+
         reservation.setEncours(false);
         reservation.setDetail(detail);
         reservationDao.save(reservation);
