@@ -181,11 +181,21 @@ public class EmpruntControllerREST {
 
     }
 
-// méthode géniale qui traite la liste des réservations quand un livre est rendu ou quand une option arrivé à son terme
+// méthode géniale qui traite la liste des réservations quand un livre est rendu ou quand une option arrive à son terme
     private void gererResa(List<Reservation> listeResaLivre){
 
-        // on récupère la première reservation
-        Reservation premiereResa = listeResaLivre.get(0) ;
+        // on récupère la première reservation qui est bien active (isEncours)  et qui n'a pas encore commencée (dateDebut == null)
+        Reservation premiereResa = new Reservation();
+
+        //on parcours la liste des réservation qui est ordonnée par les ID
+        for (int i = 0 ; i < listeResaLivre.size() ; i++){
+
+            if (listeResaLivre.get(i).isEncours() && (listeResaLivre.get(i).getDateDebut() == null)){
+                premiereResa = listeResaLivre.get(i) ;
+                break;
+            }
+        }
+
         premiereResa.setDetail("Livre Disponible");
 
         // on met une date de fin à la résa (+48h)
@@ -194,6 +204,7 @@ public class EmpruntControllerREST {
         c.add(Calendar.DATE, 2);
         Date dateFin = c.getTime();
         premiereResa.setDateFin(dateFin);
+        premiereResa.setDateDebut(new Date());
 
         // on informe le membre par mail :
         Membre premierMembre = premiereResa.getMembre();
@@ -215,6 +226,7 @@ public class EmpruntControllerREST {
         emprunt.setFinDate(new Date());
         emprunt.setRendu(true);
 
+        logger.info("Retour de l'emprunt " + emprunt);
 
         //RG un livre est rendu, avant de le rentrer en stock on regarde si une réservation peut être servie
         Livre livreRendu = livreDao.findById(emprunt.getLivre().getId());
@@ -224,7 +236,7 @@ public class EmpruntControllerREST {
         if (listResaLivre.size() > 0){
 
             // traitement la résa :
-            this.gererResa(listResaLivre);
+            gererResa(listResaLivre);
 
             return livreRendu;
 
