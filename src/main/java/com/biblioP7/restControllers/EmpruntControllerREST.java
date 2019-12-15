@@ -181,41 +181,7 @@ public class EmpruntControllerREST {
 
     }
 
-// méthode géniale qui traite la liste des réservations quand un livre est rendu ou quand une option arrive à son terme
-    private void gererResa(List<Reservation> listeResaLivre){
 
-        // on récupère la première reservation qui est bien active (isEncours)  et qui n'a pas encore commencée (dateDebut == null)
-        Reservation premiereResa = new Reservation();
-
-        //on parcours la liste des réservation qui est ordonnée par les ID
-        for (int i = 0 ; i < listeResaLivre.size() ; i++){
-
-            if (listeResaLivre.get(i).isEncours() && (listeResaLivre.get(i).getDateDebut() == null)){
-                premiereResa = listeResaLivre.get(i) ;
-                break;
-            }
-        }
-
-        premiereResa.setDetail("Livre Disponible");
-
-        // on met une date de fin à la résa (+48h)
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.add(Calendar.DATE, 2);
-        Date dateFin = c.getTime();
-        premiereResa.setDateFin(dateFin);
-        premiereResa.setDateDebut(new Date());
-
-        // on informe le membre par mail :
-        Membre premierMembre = premiereResa.getMembre();
-        Livre livre = premiereResa.getLivre();
-        System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
-                livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
-
-        // on sauvegarde la résa en persistance !
-        reservationDao.save(premiereResa);
-
-    }
 
 
     @RequestMapping(value="/api/stopperEmprunt/{id}")
@@ -226,34 +192,52 @@ public class EmpruntControllerREST {
         emprunt.setFinDate(new Date());
         emprunt.setRendu(true);
 
-        logger.info("Retour de l'emprunt " + emprunt);
+        empruntDao.save(emprunt);
+        logger.info("Arrêt de l'emprunt " + emprunt);
 
         //RG un livre est rendu, avant de le rentrer en stock on regarde si une réservation peut être servie
         Livre livreRendu = livreDao.findById(emprunt.getLivre().getId());
 
-        List<Reservation> listResaLivre = reservationDao.trouverResaEncoursParLivre(livreRendu);
+        List<Reservation> listeResaLivre = reservationDao.trouverResaEncoursParLivre(livreRendu);
 
-        if (listResaLivre.size() > 0){
+        // si on trouve une liste de réservation sur le livre on va parcourir cette liste et opérer les traitements adequats
+        boolean absenceNewOption = true;
+        if (listeResaLivre.size() > 0){
+            //on parcours la liste des réservation qui est ordonnée par les ID
+            for (int i = 0 ; i < listeResaLivre.size() ; i++){
+                if ((listeResaLivre.get(i).isEncours()) && (listeResaLivre.get(i).getDateDebut() == null)){
+                    //si on est ici c'est qu'on a attrapé une résa en cours qui n'a pas encore commencée !!
+                    Reservation premiereResa = listeResaLivre.get(i) ;
+                    premiereResa.setDetail("Livre Disponible");
+                    // on met une date de fin à la résa (+48h)
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(new Date());
+                    c.add(Calendar.DATE, 2);
+                    Date dateFin = c.getTime();
+                    premiereResa.setDateFin(dateFin);
+                    premiereResa.setDateDebut(new Date());
+                    // on informe le membre par mail :
+                    Membre premierMembre = premiereResa.getMembre();
+                    Livre livre = premiereResa.getLivre();
+                    System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
+                            livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
+                    // on sauvegarde la résa en persistance !
+                    reservationDao.save(premiereResa);
+                    absenceNewOption = false;
+                    // on sort de notre boucle for
+                    break;
+                }
+            }
 
-            // traitement la résa :
-            gererResa(listResaLivre);
+            }
 
-            return livreRendu;
+        if (absenceNewOption){
 
-        } else {
-
-
-            //on remplit le stock du livre +1
+           //on remplit le stock du livre +1
             livreRendu.restituerLivre();
-
-            //on save les 2 entités livre / emprunt
             livreDao.save(livreRendu);
-            empruntDao.save(emprunt);
-
-            logger.info("Arrêt de l'emprunt " + emprunt.getId());
-            return livreRendu;
         }
-
+        return livreRendu;
     }
 
 

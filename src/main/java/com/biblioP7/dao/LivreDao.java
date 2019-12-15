@@ -15,7 +15,7 @@ public interface LivreDao extends JpaRepository<Livre, Integer>{
 
     Livre findById(int it);
 
-    List<Livre> findLivresByStockDisponibleGreaterThan(int mini);
+    List<Livre> findLivresByStockDisponibleGreaterThanOrderByTitre(int mini);
 
 
     // requêtes de calculs

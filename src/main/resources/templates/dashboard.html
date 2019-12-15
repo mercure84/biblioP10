@@ -25,7 +25,7 @@
 
     <div class="row">
 
-
+<p></p>
 
            <h2>Mes emprunts en cours</h2>
 
@@ -60,7 +60,7 @@
             </table>
 
 
-
+        <p></p>
 
         <h2>Mes réservations</h2>
 
@@ -72,7 +72,7 @@
                 <th>Livre</th>
                 <th>Vous l'attendez depuis ...</th>
                 <th>Votre position :</th>
-                <th>Début de l'option 48h</th>
+                <th>Option 48h</th>
                 <th>Statut</th>
 
 
@@ -83,7 +83,7 @@
                 <td th:text="${resa.getReservation().getLivre().getTitre()}">Livre</td>
                 <td th:text="${#dates.format(resa.getReservation().getDateDemande(), 'dd-MM-yyyy')}">Demande Date</td>
                 <td th:text="${resa.getPosition()}">XX</td>
-                <td><span th:if="${resa.getReservation().getDateDebut()!=null}" th:text="${#dates.format(resa.getReservation().getDateDebut(), 'dd-MM-yyyy')}">Start Option</span></td>
+                <td><span th:if="${resa.getReservation().getDateDebut()!=null}" th:text="'Jusqu\'au ' + ${#dates.format(resa.getReservation().getDateFin(), 'dd-MM-yyyy')}">Start Option</span></td>
                 <td><a th:href="${'/client/annulerReservation?resaId='+ resa.getReservation().getId()}"><button th:if="${resa.getReservation().isEncours()}">Annuler</button></a><span th:if="${!resa.getReservation().isEncours()}" th:text="${resa.getReservation().getDetail()}">détail</span></td>
 
             </tr>

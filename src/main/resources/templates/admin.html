@@ -58,7 +58,7 @@
                         <form name='f' th:action="@{/client/creerEmprunt}" th:object="${creationEmprunt}" method='POST'>
 
                             <div class="form-group row">
-                                <label for="user" class="col-md-4 col-form-label text-md-right">Membre Id</label>
+                                <label for="user" class="col-md-4 col-form-label text-md-right">Membre :</label>
                                 <div class="col-md-6">
                                     <select id="user" class="form-control" name="user" th:field="*{membreId}">
                                         <option th:each="membre : ${listeMembre}"
@@ -70,12 +70,12 @@
 
 
                             <div class="form-group row">
-                                <label for="livre" class="col-md-4 col-form-label text-md-right">Mot de Passe</label>
+                                <label for="livre" class="col-md-4 col-form-label text-md-right">Livre :</label>
                                 <div class="col-md-6">
                                     <select id="livre" class="form-control" name="livre" th:field="*{livreId}">
                                     <option th:each="livre : ${listeLivresDispo}"
                                             th:value="${livre.getId()}"
-                                            th:utext="${livre.getId() + ' ' + livre.getTitre()}"/>
+                                            th:utext="${livre.getId() + ' ' + livre.getTitre() + ' ***** Stock dispo = ' + livre.getStockDisponible()}"/>
                                     </select>
                                 </div>
                             </div>
