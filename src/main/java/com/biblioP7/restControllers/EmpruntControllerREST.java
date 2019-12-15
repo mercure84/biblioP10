@@ -181,7 +181,32 @@ public class EmpruntControllerREST {
 
     }
 
-    @CrossOrigin("*")
+// méthode géniale qui traite la liste des réservations quand un livre est rendu ou quand une option arrivé à son terme
+    private void gererResa(List<Reservation> listeResaLivre){
+
+        // on récupère la première reservation
+        Reservation premiereResa = listeResaLivre.get(0) ;
+        premiereResa.setDetail("Livre Disponible");
+
+        // on met une date de fin à la résa (+48h)
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, 2);
+        Date dateFin = c.getTime();
+        premiereResa.setDateFin(dateFin);
+
+        // on informe le membre par mail :
+        Membre premierMembre = premiereResa.getMembre();
+        Livre livre = premiereResa.getLivre();
+        System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
+                livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
+
+        // on sauvegarde la résa en persistance !
+        reservationDao.save(premiereResa);
+
+    }
+
+
     @RequestMapping(value="/api/stopperEmprunt/{id}")
     public Livre livreRendu(@PathVariable int id){
 
@@ -197,14 +222,11 @@ public class EmpruntControllerREST {
         List<Reservation> listResaLivre = reservationDao.trouverResaEncoursParLivre(livreRendu);
 
         if (listResaLivre.size() > 0){
-            // on prends le premier membre de la liste des résa en cours pour ce livre et on lui écrir un email
-            Reservation resaGagnante = listResaLivre.get(0) ;
-            resaGagnante.setDetail("Livre disponible");
 
-            Livre livreGagnant = resaGagnante.getLivre();
-            Membre membreGagnant = resaGagnante.getMembre();
+            // traitement la résa :
+            this.gererResa(listResaLivre);
 
-            return null;
+            return livreRendu;
 
         } else {
 
