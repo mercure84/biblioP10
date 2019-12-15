@@ -52,15 +52,12 @@ public class AdminController {
             case "emprunt" :
                 displayMessage = "Emprunt créé avec succès";
                 break;
+            case "empruntStop" :
+                displayMessage = "Emprunt arrêté";
+                break;
             default :
                 displayMessage = null;
         }}
-
-
-        if(message!=null){
-            model.addAttribute("batchMessage", true);}
-        else {
-            model.addAttribute("batchMessage", false);}
 
         //on charge la liste des emprunts en cours
         List<Emprunt> empruntsEnCours = empruntServiceClient.listeEmpruntsEncours(token);
@@ -104,7 +101,7 @@ public class AdminController {
             return null;
 
         }
-        return "admin";
+        return "redirect:/client/admin?message=empruntStop";
 
 
     }
