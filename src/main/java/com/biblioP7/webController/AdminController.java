@@ -40,11 +40,24 @@ public class AdminController {
     ReservationServiceClient reservationServiceClient;
 
     @GetMapping("/client/admin")
-    public String afficherPageAdmin(HttpSession session, Model model, String batchMessage){
+    public String afficherPageAdmin(HttpSession session, Model model, String message){
 
         String token = session.getAttribute("token").toString();
+        String displayMessage = null;
+        if ( message !=null){
+        switch (message){
+            case "batch" :
+                displayMessage = "Batch lancé";
+                break;
+            case "emprunt" :
+                displayMessage = "Emprunt créé avec succès";
+                break;
+            default :
+                displayMessage = null;
+        }}
 
-        if(batchMessage!=null){
+
+        if(message!=null){
             model.addAttribute("batchMessage", true);}
         else {
             model.addAttribute("batchMessage", false);}
@@ -59,7 +72,8 @@ public class AdminController {
         model.addAttribute("empruntsEncours", empruntsEnCours);
         model.addAttribute("creationEmprunt", new CreationEmprunt());
         model.addAttribute("listeMembre", membreServiceClient.listeMembres(token));
-        model.addAttribute("listeLivresDispo", livreServiceClient.listeLivresDisponibles(token) );
+        model.addAttribute("listeLivresDispo", livreServiceClient.listeLivresDisponibles(token));
+        model.addAttribute("displayMessage", displayMessage);
 
         return "admin";
     }
@@ -70,9 +84,8 @@ public class AdminController {
 
         String token = session.getAttribute("token").toString();
         empruntServiceClient.creerEmprunt(token, creationEmprunt);
-        String message = "L'emprunt a bien été créé !";
-        model.addAttribute("message", message);
-        return "admin";
+
+        return "redirect:/client/admin?message=emprunt";
     }
 
     @GetMapping("/client/stopperEmprunt")
@@ -102,7 +115,7 @@ public class AdminController {
 
         empruntServiceClient.lancerBatch(token);
 
-        return "redirect:/client/admin?batchMessage=oui";
+        return "redirect:/client/admin?message=batch";
     }
 
 

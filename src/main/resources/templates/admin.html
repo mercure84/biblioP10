@@ -31,12 +31,9 @@
                 immédiatement</p>
 
             <a th:href="@{/client/admin/batch}"><button>Lancer le batch des emprunts échus !</button></a>
-            <p th:if="${batchMessage}" style="color:orange">Le batch a édité un fichier texte disponible à la racine du projet</p>
-
-
-            <div th:if="${message != null}">
+            <div>
                 <p style="color:red"><span
-                        th:text="${message}"></span>
+                        th:text="${displayMessage}"></span>
                 </p>
 
                 <p></p><a href="/client/admin">
@@ -44,7 +41,7 @@
             </a></div>
         </div>
 
-        <div th:if="${message == null}" class="col-md-10">
+        <div class="col-md-10">
 
             <p></p>
 

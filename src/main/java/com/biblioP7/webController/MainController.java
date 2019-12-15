@@ -30,7 +30,7 @@ public class MainController {
 
 
 
-        // on passe quelques données sur la bdd une fois que le membre est connecté
+        // on passe les stats de stock de livres à titre d'informations une fois que le membre est connecté
         Map<String, Integer> compterLivres = livreServiceClient.nbLivres();
 
         model.addAttribute("nbLivres", compterLivres.get("nbLivres"));
