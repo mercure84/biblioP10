@@ -113,14 +113,14 @@ public class ReservationControllerREST {
         }
 
     private int positionResaMembre(int livreId, int membreId){
-        int position = 0;
+        int position = 1;
         // récupération de la liste des résa pour le livre donné
         List<Reservation> listeResa = reservationDao.trouverResaEncoursParLivre(livreDao.findById(livreId));
 
         for (int i = 0; i< listeResa.size() ; i++
              ) {
             if (listeResa.get(i).getMembre().getId() == membreId ){
-             position = i;
+             position = i+1;
              break;
             }
             }
@@ -134,7 +134,7 @@ public class ReservationControllerREST {
 
         for (Reservation resa : listeResa
              ) {
-            int position = 0;
+            int position = 1;
             if (resa.isEncours()){
             position = this.positionResaMembre(resa.getLivre().getId(), membre.getId());}
             listeResaMembre.add(new ResaPosition(resa, position));

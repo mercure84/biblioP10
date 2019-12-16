@@ -23,7 +23,7 @@ public interface EmpruntDao extends JpaRepository<Emprunt, Integer> {
 
     List<Emprunt> findEmpruntsByMembre(Membre membre);
 
-    @Query("SELECT emprunts FROM Emprunt emprunts WHERE emprunts.isRendu = ?1 ORDER BY emprunts.id")
+    @Query("SELECT emprunts FROM Emprunt emprunts WHERE emprunts.isRendu = ?1 ORDER BY emprunts.livre.titre")
     List<Emprunt> findEmpruntsEncours(boolean isRendu);
 
     @Query("Select emprunts from Emprunt emprunts Where emprunts.isRendu = false and emprunts.membre =?1")
