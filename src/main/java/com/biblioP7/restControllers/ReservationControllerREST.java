@@ -94,17 +94,15 @@ public class ReservationControllerREST {
         return reservation;
     }
 
+    //la réservation est annulée à l'initiative du membre
     @GetMapping(value="/api/annulerReservation")
     public void annulerReservation(@RequestHeader("Authorization") String token, @RequestParam int resaId, @RequestParam String detail){
 
         Reservation reservation = reservationDao.findById(resaId);
-        // si nous sommes dans les 48h d'une option il faut aussi remettre l livre en stock
+        // si nous sommes dans les 48h d'une option il faut aussi remettre l livre en stock et surtout regarder s'il n'y a pas un autre membre du attend le livre
         if (reservation.getDateFin()  != null){
             Livre livreLibere = reservation.getLivre();
-            livreLibere.restituerLivre();
-            livreDao.save(livreLibere);
-            logger.info("Une option a été annulée et une copie du livre " +livreLibere.getTitre()+ " + est remis en stock");
-
+            gererListeAttente(livreLibere);
         }
 
         reservation.setEncours(false);
@@ -158,57 +156,54 @@ public class ReservationControllerREST {
             resa.setDetail("Expirée");
             Livre livreLibere = resa.getLivre();
 
-            List<Reservation> listeResaLivre = reservationDao.trouverResaEncoursParLivre(livreLibere);
-
-            // si on trouve une liste de réservations sur le livre on va parcourir cette liste et opérer les traitements adequats
-            boolean absenceNewOption = true;
-            if (listeResaLivre.size() > 0){
-                //on parcours la liste des réservation qui est ordonnée par les ID
-                for (int i = 0 ; i < listeResaLivre.size() ; i++){
-                    if ((listeResaLivre.get(i).isEncours()) && (listeResaLivre.get(i).getDateDebut() == null)){
-                        //si on est ici c'est qu'on a attrapé une résa en cours qui n'a pas encore commencée !!
-                        Reservation premiereResa = listeResaLivre.get(i) ;
-                        premiereResa.setDetail("Livre Disponible");
-                        // on met une date de fin à la résa (+48h)
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(new Date());
-                        c.add(Calendar.DATE, 2);
-                        Date dateFin = c.getTime();
-                        premiereResa.setDateFin(dateFin);
-                        premiereResa.setDateDebut(new Date());
-                        // on informe le membre par mail :
-                        Membre premierMembre = premiereResa.getMembre();
-                        Livre livre = premiereResa.getLivre();
-                        System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
-                                livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
-                        // on sauvegarde la résa en persistance !
-                        reservationDao.save(premiereResa);
-                        absenceNewOption = false;
-                        // on sort de notre boucle for
-                        break;
-                    }
-                }
-
-            }
-
-            if (absenceNewOption){
-
-                //on remplit le stock du livre +1
-                livreLibere.restituerLivre();
-                livreDao.save(livreLibere);
-                logger.info("Le Livre suivant doit être remis en stock : " + livreLibere.getTitre() + " Id :" + livreLibere.getId());
-            }
-
-
-
+            gererListeAttente(livreLibere);
         }
-
         logger.info("Les réservation suivantes ont été mises en statut expiré : " + listeResaPurge);
         return listeResaPurge;
-
-
     }
 
+
+// méthode qui va traiter la liste d'attente d'un livre quand une option est annulée par le batch ou un membre directement
+    private void gererListeAttente(Livre livreParam){
+        List<Reservation> listeResaLivre = reservationDao.trouverResaEncoursParLivre(livreParam);
+        // si on trouve une liste de réservations sur le livre on va parcourir cette liste et opérer les traitements adequats
+        boolean absenceNewOption = true;
+        if (listeResaLivre.size() > 0){
+            //on parcours la liste des réservation qui est ordonnée par les ID
+            for (int i = 0 ; i < listeResaLivre.size() ; i++){
+                if ((listeResaLivre.get(i).isEncours()) && (listeResaLivre.get(i).getDateDebut() == null)){
+                    //si on est ici c'est qu'on a attrapé une résa en cours qui n'a pas encore commencée !!
+                    Reservation premiereResa = listeResaLivre.get(i) ;
+                    premiereResa.setDetail("Livre Disponible");
+                    // on met une date de fin à la résa (+48h)
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(new Date());
+                    c.add(Calendar.DATE, 2);
+                    Date dateFin = c.getTime();
+                    premiereResa.setDateFin(dateFin);
+                    premiereResa.setDateDebut(new Date());
+                    // on informe le membre par mail :
+                    Membre premierMembre = premiereResa.getMembre();
+                    Livre livre = premiereResa.getLivre();
+                    System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
+                            livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
+                    // on sauvegarde la résa en persistance !
+                    reservationDao.save(premiereResa);
+                    absenceNewOption = false;
+                    // on sort de notre boucle for
+                    break;
+                }
+            }
+        }
+        if (absenceNewOption){
+
+            //on remplit le stock du livre +1
+            livreParam.restituerLivre();
+            livreDao.save(livreParam);
+            logger.info("Le Livre suivant doit être remis en stock : " + livreParam.getTitre() + " Id :" + livreParam.getId());
+        }
+
+    }
 
 
 
