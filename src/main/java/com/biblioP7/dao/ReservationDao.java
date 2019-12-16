@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -19,6 +20,10 @@ public interface ReservationDao extends JpaRepository<Reservation, Integer> {
     List<Reservation> findAllByMembre(Membre membre);
 
     List<Reservation> findAllByMembreOrderById(Membre membre);
+
+    @Query("Select reservations from Reservation  reservations Where reservations.isEncours = true and reservations.dateFin <?1")
+    List<Reservation> listerResaExpiree(Date date);
+
 
     @Query("Select reservations from Reservation  reservations Where reservations.isEncours = true and reservations.livre =?1 order by  reservations.id")
     List<Reservation> trouverResaEncoursParLivre(Livre livre);

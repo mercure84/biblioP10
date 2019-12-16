@@ -46,8 +46,11 @@ public class AdminController {
         String displayMessage = null;
         if ( message !=null){
         switch (message){
-            case "batch" :
-                displayMessage = "Batch lancé";
+            case "batchEmprunt" :
+                displayMessage = "Batch lancé sur les emprunts échus : voir le fichier text généré";
+                break;
+            case "batchResa" :
+                displayMessage = "Batch lancé sur les réservations échues : voir les logs !";
                 break;
             case "emprunt" :
                 displayMessage = "Emprunt créé avec succès";
@@ -106,13 +109,18 @@ public class AdminController {
 
     }
 
-    @GetMapping("/client/admin/batch")
-    public String lancerBatch(HttpSession session){
+    @GetMapping("/client/admin/batchEmprunt")
+    public String lancerBatchEmprunt(HttpSession session){
         String token = session.getAttribute("token").toString();
+        empruntServiceClient.lancerBatchEmprunt(token);
+        return "redirect:/client/admin?message=batchEmprunt";
+    }
 
-        empruntServiceClient.lancerBatch(token);
-
-        return "redirect:/client/admin?message=batch";
+    @GetMapping("/client/admin/batchResa")
+    public String lancerBatchResa(HttpSession session){
+        String token = session.getAttribute("token").toString();
+        reservationServiceClient.purgerListeResa(token);
+        return "redirect:/client/admin?message=batchResa";
     }
 
 

@@ -31,4 +31,7 @@ public interface ReservationServiceClient {
 
     @PostMapping(value="/api/listeResaMembrePositions")
     List<ResaPosition> listeResaPositions (@RequestHeader("Authorization") String token, @RequestBody Membre membre);
+
+    @GetMapping(value="/api/batchPurgerReservations")
+    void purgerListeResa (@RequestHeader("Authorization") String token);
 }

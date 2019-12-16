@@ -61,7 +61,7 @@ public class ReservationController {
         Reservation reservation = new Reservation();
         reservation.setMembre(membre);
         reservation.setLivre(livre);
-        reservation.setDetail("en cours");
+        reservation.setDetail("attente");
         try {
             reservationServiceClient.creerReservation(token, reservation);
             return "redirect:/client/dashboard";

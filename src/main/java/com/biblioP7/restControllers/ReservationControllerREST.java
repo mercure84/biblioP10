@@ -7,8 +7,6 @@ import com.biblioP7.dao.LivreDao;
 import com.biblioP7.dao.MembreDao;
 import com.biblioP7.dao.ReservationDao;
 import com.biblioP7.exception.FunctionalException;
-import com.biblioP7.security.JwtTokenUtil;
-import com.biblioP7.security.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,6 +143,72 @@ public class ReservationControllerREST {
         return listeResaMembre;
 
     }
+
+    //batch qui va nettoyer les réservations échues : à lancer tous les jours à 0h01
+    @GetMapping(value="/api/batchPurgerReservations")
+    void purgerListeResa (@RequestHeader("Authorization") String token){
+        // récupération de la liste des réservation qui sont en cours et qui ont une date > date du jour
+        // nous sommes le 15/12 : toutes les réservations en cours avec pour échéance le 14/12 doivent être passée en "expirées"
+        List<Reservation> listeResaPurge = reservationDao.listerResaExpiree(new Date());
+
+        // on parcourt chaque réservation et on l'annule :
+        // le livre doit revenir en stock : on contrôle comme une restitution si un autre membre l'a réservé ou pas
+        for (Reservation resa : listeResaPurge
+             ) {
+            resa.setEncours(false);
+            resa.setDetail("Expirée");
+            Livre livreLibere = resa.getLivre();
+
+            List<Reservation> listeResaLivre = reservationDao.trouverResaEncoursParLivre(livreLibere);
+
+            // si on trouve une liste de réservation sur le livre on va parcourir cette liste et opérer les traitements adequats
+            boolean absenceNewOption = true;
+            if (listeResaLivre.size() > 0){
+                //on parcours la liste des réservation qui est ordonnée par les ID
+                for (int i = 0 ; i < listeResaLivre.size() ; i++){
+                    if ((listeResaLivre.get(i).isEncours()) && (listeResaLivre.get(i).getDateDebut() == null)){
+                        //si on est ici c'est qu'on a attrapé une résa en cours qui n'a pas encore commencée !!
+                        Reservation premiereResa = listeResaLivre.get(i) ;
+                        premiereResa.setDetail("Livre Disponible");
+                        // on met une date de fin à la résa (+48h)
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(new Date());
+                        c.add(Calendar.DATE, 2);
+                        Date dateFin = c.getTime();
+                        premiereResa.setDateFin(dateFin);
+                        premiereResa.setDateDebut(new Date());
+                        // on informe le membre par mail :
+                        Membre premierMembre = premiereResa.getMembre();
+                        Livre livre = premiereResa.getLivre();
+                        System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
+                                livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
+                        // on sauvegarde la résa en persistance !
+                        reservationDao.save(premiereResa);
+                        absenceNewOption = false;
+                        // on sort de notre boucle for
+                        break;
+                    }
+                }
+
+            }
+
+            if (absenceNewOption){
+
+                //on remplit le stock du livre +1
+                livreLibere.restituerLivre();
+                livreDao.save(livreLibere);
+            }
+
+
+
+        }
+
+        logger.info("Les réservation suivantes ont été mises en statut expiré : " + listeResaPurge);
+
+
+    }
+
+
 
 
 

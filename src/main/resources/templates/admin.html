@@ -30,7 +30,9 @@
             <p>Attention l'outil est en version ALPHA : les saisies ne demandes pas de confirmation et sont validées
                 immédiatement</p>
 
-            <a th:href="@{/client/admin/batch}"><button>Lancer le batch des emprunts échus !</button></a>
+            <a th:href="@{/client/admin/batchEmprunt}"><button>Lancer le batch des emprunts échus !</button></a>
+            <a th:href="@{/client/admin/batchResa}"><button>Lancer le batch des Réservation expirées !</button></a>
+
             <div>
                 <p style="color:red"><span
                         th:text="${displayMessage}"></span>
