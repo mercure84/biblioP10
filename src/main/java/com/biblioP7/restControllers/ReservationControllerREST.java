@@ -128,7 +128,7 @@ public class ReservationControllerREST {
     }
 
     @PostMapping(value="/api/listeResaMembrePositions")
-    List<ResaPosition> listeResaPositions (@RequestHeader("Authorization") String token, @RequestBody Membre membre){
+    public List<ResaPosition> listeResaPositions (@RequestHeader("Authorization") String token, @RequestBody Membre membre){
     List<ResaPosition> listeResaMembre = new ArrayList<ResaPosition>();
     List<Reservation> listeResa = reservationDao.findAllByMembre(membre);
 
@@ -139,14 +139,13 @@ public class ReservationControllerREST {
             position = this.positionResaMembre(resa.getLivre().getId(), membre.getId());}
             listeResaMembre.add(new ResaPosition(resa, position));
             }
-//        System.out.println("Liste resa avec position = " + listeResaMembre);
         return listeResaMembre;
 
     }
 
     //batch qui va nettoyer les réservations échues : à lancer tous les jours à 0h01
     @GetMapping(value="/api/batchPurgerReservations")
-    void purgerListeResa (@RequestHeader("Authorization") String token){
+    public List<Reservation> purgerListeResa (@RequestHeader("Authorization") String token){
         // récupération de la liste des réservation qui sont en cours et qui ont une date > date du jour
         // nous sommes le 15/12 : toutes les réservations en cours avec pour échéance le 14/12 doivent être passée en "expirées"
         List<Reservation> listeResaPurge = reservationDao.listerResaExpiree(new Date());
@@ -161,7 +160,7 @@ public class ReservationControllerREST {
 
             List<Reservation> listeResaLivre = reservationDao.trouverResaEncoursParLivre(livreLibere);
 
-            // si on trouve une liste de réservation sur le livre on va parcourir cette liste et opérer les traitements adequats
+            // si on trouve une liste de réservations sur le livre on va parcourir cette liste et opérer les traitements adequats
             boolean absenceNewOption = true;
             if (listeResaLivre.size() > 0){
                 //on parcours la liste des réservation qui est ordonnée par les ID
@@ -197,6 +196,7 @@ public class ReservationControllerREST {
                 //on remplit le stock du livre +1
                 livreLibere.restituerLivre();
                 livreDao.save(livreLibere);
+                logger.info("Le Livre suivant doit être remis en stock : " + livreLibere.getTitre() + " Id :" + livreLibere.getId());
             }
 
 
@@ -204,6 +204,7 @@ public class ReservationControllerREST {
         }
 
         logger.info("Les réservation suivantes ont été mises en statut expiré : " + listeResaPurge);
+        return listeResaPurge;
 
 
     }

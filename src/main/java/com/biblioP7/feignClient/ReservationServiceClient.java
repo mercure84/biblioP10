@@ -33,5 +33,5 @@ public interface ReservationServiceClient {
     List<ResaPosition> listeResaPositions (@RequestHeader("Authorization") String token, @RequestBody Membre membre);
 
     @GetMapping(value="/api/batchPurgerReservations")
-    void purgerListeResa (@RequestHeader("Authorization") String token);
+    List<Reservation> purgerListeResa (@RequestHeader("Authorization") String token);
 }

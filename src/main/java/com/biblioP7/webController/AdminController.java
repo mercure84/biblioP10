@@ -112,6 +112,7 @@ public class AdminController {
     @GetMapping("/client/admin/batchEmprunt")
     public String lancerBatchEmprunt(HttpSession session){
         String token = session.getAttribute("token").toString();
+
         empruntServiceClient.lancerBatchEmprunt(token);
         return "redirect:/client/admin?message=batchEmprunt";
     }
