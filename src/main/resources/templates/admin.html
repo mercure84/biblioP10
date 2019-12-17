@@ -139,7 +139,7 @@
                     <td th:text="${#dates.format(ligneR.getDateDemande(), 'dd-MM-yyyy')}">StartDate</td>
                     <td th:text="${ligneR.getLivre().getTitre() + ' ' + ligneR.getLivre().getIsbn()}">Book</td>
                     <td th:text="${ligneR.membre.getPrenom() + ' ' + ligneR.getMembre().getNom()}">Membre</td>
-                    <td th:text="${ligneR.getDetail()}"></td>
+                    <td><span th:text="${ligneR.getDetail()}"></span><a th:href="${'/client/validerOption?resaId='+ ligneR.getId()}"><button th:if="${ligneR.getDetail() == 'Livre Disponible'}">Donner !</button></a></td>
 
                 </tr>
                 </tbody>

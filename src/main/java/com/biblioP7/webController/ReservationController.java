@@ -97,5 +97,13 @@ public class ReservationController {
 
 
 
+    @GetMapping("client/validerOption")
+    public String validerOption(HttpSession session, String resaId){
+        String token = session.getAttribute("token").toString();
+        reservationServiceClient.validerOption(token, Integer.parseInt((resaId)));
+
+        return "redirect:/client/admin" ;
+    }
+
 
 }

@@ -206,6 +206,29 @@ public class ReservationControllerREST {
     }
 
 
+    @GetMapping("/api/validerOption")
+    public Emprunt validerOption(@RequestHeader("Authorization") String token, int resaId) {
+
+        Reservation resa = reservationDao.findById(resaId);
+        Emprunt emprunt = new Emprunt();
+        emprunt.setDebutDate(new Date());
+        emprunt.setLivre(resa.getLivre());
+        emprunt.setMembre(resa.getMembre());
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, 2);
+        Date dateFin = c.getTime();
+        emprunt.setFinDate(dateFin);
+        empruntDao.save(emprunt);
+
+        resa.setEncours(false);
+        resa.setDetail("Option validée");
+        reservationDao.save(resa);
+logger.info("Nouvel emprunt : " + emprunt.getId() + emprunt.getLivre());
+logger.info("La réservation " + resa.getId() + " est terminée !");
+        return emprunt;
+
+    }
 
 
 }

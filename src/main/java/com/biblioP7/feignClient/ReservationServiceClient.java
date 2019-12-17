@@ -1,9 +1,6 @@
 package com.biblioP7.feignClient;
 
-import com.biblioP7.beans.Livre;
-import com.biblioP7.beans.Membre;
-import com.biblioP7.beans.ResaPosition;
-import com.biblioP7.beans.Reservation;
+import com.biblioP7.beans.*;
 import com.biblioP7.exception.FunctionalException;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -34,4 +31,7 @@ public interface ReservationServiceClient {
 
     @GetMapping(value="/api/batchPurgerReservations")
     List<Reservation> purgerListeResa (@RequestHeader("Authorization") String token);
+
+    @GetMapping(value="/api/validerOption")
+    Emprunt validerOption(@RequestHeader("Authorization")String token, @RequestParam int resaId);
 }
