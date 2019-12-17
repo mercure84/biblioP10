@@ -6,7 +6,7 @@ import com.biblioP7.dao.EmpruntDao;
 import com.biblioP7.dao.LivreDao;
 import com.biblioP7.dao.MembreDao;
 import com.biblioP7.dao.ReservationDao;
-import com.biblioP7.exception.FunctionalException;
+import com.biblioP7.exception.ReservationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +48,13 @@ public class ReservationControllerREST {
 
     @CrossOrigin("*")
     @PostMapping(value = "/api/creerReservation")
-    public Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation) throws FunctionalException {
+    public Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation) throws ReservationException {
 
 
         // RG : on peut réserver le livre uniquement si la liste n'est pas pleine à savoir nbResa du livre < 2 x stock total
         int nbResaLivre = reservationDao.trouverResaEncoursParLivre(reservation.getLivre()).size();
         if (nbResaLivre >= (reservation.getLivre().getStockTotal() * 2)) {
-            throw new FunctionalException("Le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé, trop d'exemlaires demandés");
+            throw new ReservationException("Le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé, trop d'exemlaires demandés");
 
         }
 
@@ -65,14 +65,14 @@ public class ReservationControllerREST {
         for (Reservation resa : listeResaMembre
         ) {
             if (resa.getLivre().equals(reservation.getLivre())) {
-                throw new FunctionalException("le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé, car le membre a déjà une réservation en cours pour cet ouvrage");
+                throw new ReservationException("le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé, car le membre a déjà une réservation en cours pour cet ouvrage");
 
 
             }
         }
         for (Emprunt emprunt : listeEmpruntMembre) {
             if (emprunt.getLivre().equals(reservation.getLivre())) {
-                throw new FunctionalException("le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé car le membre a déjà un emprunt en cours pour cet ouvrage");
+                throw new ReservationException("le livre " + reservation.getLivre().getTitre() + " ne peut pas être réservé car le membre a déjà un emprunt en cours pour cet ouvrage");
             }
         }
 

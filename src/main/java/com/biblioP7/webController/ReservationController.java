@@ -3,7 +3,7 @@ package com.biblioP7.webController;
 import com.biblioP7.beans.Livre;
 import com.biblioP7.beans.Membre;
 import com.biblioP7.beans.Reservation;
-import com.biblioP7.exception.FunctionalException;
+import com.biblioP7.exception.ReservationException;
 import com.biblioP7.feignClient.LivreServiceClient;
 import com.biblioP7.feignClient.MembreServiceClient;
 import com.biblioP7.feignClient.ReservationServiceClient;
@@ -49,7 +49,7 @@ public class ReservationController {
     }
 
     @GetMapping("/client/reserverLivre")
-    public String creerReservation(HttpSession session, Model model, String livreId) throws FunctionalException{
+    public String creerReservation(HttpSession session, Model model, String livreId) throws ReservationException{
 
         String token = session.getAttribute("token").toString();
         Livre livre = livreServiceClient.detailLivre(token, Integer.parseInt(livreId));
@@ -64,7 +64,7 @@ public class ReservationController {
             reservationServiceClient.creerReservation(token, reservation);
             return "redirect:/client/dashboard";
 
-        } catch (FunctionalException e) {
+        } catch (ReservationException e) {
             model.addAttribute("erreurMessage", "La reservation n'est pas possible :  " + e.toString());
             return "error";
 
