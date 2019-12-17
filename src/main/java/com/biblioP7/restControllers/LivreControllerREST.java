@@ -25,6 +25,8 @@ public class LivreControllerREST {
     @RequestMapping(value="/api/Livre/listeLivres", method= RequestMethod.GET)
     public List<Livre> listeLivres(){
         List<Livre> livres = livreDao.findAll();
+        logger.info("[REST] Affichage de la liste de livres");
+
         return livres;
     }
 
@@ -32,6 +34,8 @@ public class LivreControllerREST {
     @RequestMapping(value="/api/Livre/listeLivresDisponibles", method= RequestMethod.GET)
     public List<Livre> listeLivresDisponibles(){
         List<Livre> livres = livreDao.findLivresByStockDisponibleGreaterThanOrderByTitre(0);
+        logger.info("[REST] Affichage de la liste de livres disponibles");
+
         return livres;
     }
 
@@ -46,6 +50,7 @@ public class LivreControllerREST {
 
         resultat.put("nbLivres", nbLivres);
         resultat.put("nbLivresDispo", nbLivresDispo);
+        logger.info("[REST] Affichage du nombres de livres dispo :" + nbLivresDispo + " et total : " + nbLivres);
 
         return resultat;
     }
@@ -65,6 +70,8 @@ public class LivreControllerREST {
         List<Livre> livresDispo = livreDao.findLivresByStockDisponibleGreaterThanOrderByTitre(0);
         Random rand = new Random();
         Livre livreRandom = livresDispo.get(rand.nextInt(livresDispo.size()));
+        logger.info("[REST] Un livre au hasard : " + livreRandom);
+
         return livreRandom;
     }
 
@@ -95,16 +102,15 @@ public class LivreControllerREST {
             return new ResponseEntity<>(resultat, HttpStatus.OK);
         } catch (Exception e) {
 
+            logger.error("[REST] Problème dans la recherche d'un libre typeRecherche // champRecherche:"  + typeRecherche + " // " + champRecherche);
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur " + e );        }
-
-
     }
-
-
 
 
     @PostMapping(value="/api/Livre/ajouterLivre")
     public void ajouterLivre(@RequestBody Livre livre){
+        logger.info("[REST] Aujout d'un nouveau livre : "+ livre);
         livreDao.save(livre);
     }
 
