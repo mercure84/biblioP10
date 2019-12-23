@@ -25,7 +25,7 @@ public class LivreControllerREST {
     @RequestMapping(value="/api/Livre/listeLivres", method= RequestMethod.GET)
     public List<Livre> listeLivres(){
         List<Livre> livres = livreDao.findAll();
-        logger.info("[REST] Affichage de la liste de livres");
+        logger.info("[REST] Demande de la liste de livres");
 
         return livres;
     }
@@ -34,7 +34,7 @@ public class LivreControllerREST {
     @RequestMapping(value="/api/Livre/listeLivresDisponibles", method= RequestMethod.GET)
     public List<Livre> listeLivresDisponibles(){
         List<Livre> livres = livreDao.findLivresByStockDisponibleGreaterThanOrderByTitre(0);
-        logger.info("[REST] Affichage de la liste de livres disponibles");
+        logger.info("[REST] Demande de la liste de livres disponibles");
 
         return livres;
     }
@@ -50,7 +50,7 @@ public class LivreControllerREST {
 
         resultat.put("nbLivres", nbLivres);
         resultat.put("nbLivresDispo", nbLivresDispo);
-        logger.info("[REST] Affichage du nombres de livres dispo :" + nbLivresDispo + " et total : " + nbLivres);
+        logger.info("[REST] Demande du nombres de livres dispo :" + nbLivresDispo + " et total : " + nbLivres);
 
         return resultat;
     }

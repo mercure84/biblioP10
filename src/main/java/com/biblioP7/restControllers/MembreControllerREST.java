@@ -27,7 +27,7 @@ public class MembreControllerREST {
     @RequestMapping(value="/api/listeMembres", method= RequestMethod.GET)
     public List<Membre> listeMembres(){
         List<Membre> membres = membreDao.findAllByOrderByIdAsc();
-        logger.info("[REST] Affichage de la liste des membre");
+        logger.info("[REST] Demande de la liste des membre");
 
         return membres;
     }

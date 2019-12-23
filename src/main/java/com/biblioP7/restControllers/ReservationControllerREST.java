@@ -37,7 +37,7 @@ public class ReservationControllerREST {
     @PostMapping(value = "/api/listeReservationsMembre")
     public List<Reservation> listeReservationsMembre(@RequestHeader("Authorization") String token, @RequestBody int membreId) {
         Membre membre = membreDao.findById(membreId);
-        return reservationDao.findAllByMembre(membre);
+        return reservationDao.findAllByMembreOrderByIdDesc(membre);
     }
 
     @CrossOrigin("*")
@@ -128,7 +128,7 @@ public class ReservationControllerREST {
     @PostMapping(value = "/api/listeResaMembrePositions")
     public List<ResaPosition> listeResaPositions(@RequestHeader("Authorization") String token, @RequestBody Membre membre) {
         List<ResaPosition> listeResaMembre = new ArrayList<ResaPosition>();
-        List<Reservation> listeResa = reservationDao.findAllByMembre(membre);
+        List<Reservation> listeResa = reservationDao.findAllByMembreOrderByIdDesc(membre);
 
         for (Reservation resa : listeResa
         ) {

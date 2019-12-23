@@ -7,14 +7,8 @@ public class ReservationException extends Exception {
 
     public ReservationException(String pMessage) {
         super(pMessage);
-    }
 
-    public ReservationException(Throwable pCause) {
-        super(pCause);
-    }
 
-    public ReservationException(String pMessage, Throwable pCause) {
-        super(pMessage, pCause);
     }
 
 }
