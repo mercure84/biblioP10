@@ -301,8 +301,7 @@ public class EmpruntControllerREST {
 
 
     private void fichierMails(List<Emprunt> empruntsEchus, List<String> messages) throws IOException {
-//        System.out.println("Emprunts échus : \n" + empruntsEchus);
-//        System.out.println("Messages générés : \n" + messages);
+
         try{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateString = dateFormat.format(new Date());

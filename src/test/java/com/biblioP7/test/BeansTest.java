@@ -1,4 +1,4 @@
-package com.biblioP7.beans.test;
+package com.biblioP7.test;
 
 
 import com.biblioP7.beans.*;
@@ -48,7 +48,6 @@ public class BeansTest {
     public void LivreTest(){
         Livre livre = new Livre();
         livre.setIsbn("123456789");
-        livre.setDisponible(true);
         livre.setAuteurNom("NomAuteur Test");
         livre.setAuteurPrenom("PrenomAuteur Test");
         livre.setCollection("collection test");
