@@ -28,7 +28,7 @@ public class BiblioP7Application {
 	public static void main(String[] args) {
 		SpringApplication.run(BiblioP7Application.class, args);
 
-		logger.warn(" L'application BiblioP7 est lancée !");
+		logger.info(" L'application BiblioP7 est lancée !");
 	}
 
 }

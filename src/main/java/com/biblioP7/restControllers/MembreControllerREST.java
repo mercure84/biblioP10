@@ -14,9 +14,9 @@ import java.util.List;
 
 
 @RestController
-public class MembreController {
+public class MembreControllerREST {
 
-    private static final Logger logger = LoggerFactory.getLogger(MembreController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MembreControllerREST.class);
 
 
 
@@ -27,12 +27,17 @@ public class MembreController {
     @RequestMapping(value="/api/listeMembres", method= RequestMethod.GET)
     public List<Membre> listeMembres(){
         List<Membre> membres = membreDao.findAllByOrderByIdAsc();
+        logger.info("[REST] Demande de la liste des membre");
+
         return membres;
     }
 
     @CrossOrigin("*")
     @GetMapping(value="/api/Membre/data/{email}")
     public Membre dataMembre(@PathVariable String email){
+
+        logger.info("[REST] Appel des détails d'un membre : " + email);
+
         return membreDao.findByEmail(email);
     }
 
@@ -40,6 +45,9 @@ public class MembreController {
     @CrossOrigin("*")
     @GetMapping(value="/api/Membre/{id}")
     public Membre detailMembre(@PathVariable int id){
+
+        logger.info("[REST] Appel des détails du membre " + id);
+
         return membreDao.findById(id);
     }
 
@@ -62,6 +70,8 @@ public class MembreController {
         membre.setPassword(encodedPassword);
 
         membreDao.save(membre);
+        logger.info("[REST] Un nouveau membre a été ajouté à la BDD " + membre);
+
         return membre;
     }
 

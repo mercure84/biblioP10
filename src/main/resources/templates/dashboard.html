@@ -25,7 +25,7 @@
 
     <div class="row">
 
-
+<p></p>
 
            <h2>Mes emprunts en cours</h2>
 
@@ -42,7 +42,7 @@
                 </tr></thead>
                 <tbody>
                 <tr th:each="ligneE : ${listeEmprunts}" th:style="${ligneE.isRendu()}? 'color:red' : 'color:green'">
-                    <td th:text="${ligneE.getLivre().getTitre()}">Nom Topo</td>
+                    <td th:text="${ligneE.getLivre().getTitre()}">Nom Livre</td>
                     <td th:text="${#dates.format(ligneE.getDebutDate(), 'dd-MM-yyyy')}">StartDate</td>
                     <td th:text="${#dates.format(ligneE.getFinDate(), 'dd-MM-yyyy')}">EndDate</td>
                     <td th:text="${ligneE.isRendu()? 'Oui' : 'Non'}">Rendu</td>
@@ -58,6 +58,39 @@
                 </tr>
                 </tbody>
             </table>
+
+
+        <p></p>
+
+        <h2>Mes réservations</h2>
+
+        <table style="margin-top: 10px" class="table">
+            <thead>
+            <tr>
+                <th>N°</th>
+
+                <th>Livre</th>
+                <th>Vous l'attendez depuis ...</th>
+                <th>Votre position :</th>
+                <th>Option 48h</th>
+                <th>Statut</th>
+
+
+            </tr></thead>
+            <tbody>
+            <tr th:each="resa : ${listeResa}" th:style="${resa.getReservation().isEncours()}? 'color:blue' : 'color:red'">
+                <td th:text="${resa.getReservation().getId()}">Id</td>
+                <td th:text="${resa.getReservation().getLivre().getTitre()}">Livre</td>
+                <td th:text="${#dates.format(resa.getReservation().getDateDemande(), 'dd-MM-yyyy')}">Demande Date</td>
+                <td th:text="${resa.getPosition()}">XX</td>
+                <td><span th:if="${resa.getReservation().getDateDebut()!=null}" th:text="'Jusqu\'au ' + ${#dates.format(resa.getReservation().getDateFin(), 'dd-MM-yyyy')}">Start Option</span></td>
+                <td><a th:href="${'/client/annulerReservation?resaId='+ resa.getReservation().getId()}"><button th:if="${resa.getReservation().isEncours()}">Annuler</button></a><span th:if="${!resa.getReservation().isEncours()}" th:text="${resa.getReservation().getDetail()}">détail</span></td>
+
+            </tr>
+            </tbody>
+        </table>
+
+
 
 
         </div>

@@ -29,7 +29,7 @@ public class RechercheLivreController {
 
             String token = session.getAttribute("token").toString();
 
-            List<Livre> allBooks = livreServiceClient.listeLivres(token);
+            List<Livre> allBooks = livreServiceClient.findLivresByStockDisponibleDesc(token);
             model.addAttribute("allBooks", allBooks);
             model.addAttribute("afficherTout", true);
         }

@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //autorisation pour les urls...
 
         //autorisation du site web front end (reactJS pas concerné).
-        http.authorizeRequests().antMatchers("/client/**", "/img/**", "favicon.ico").permitAll();
+        http.authorizeRequests().antMatchers("/client/**", "/img/**", "**favico**").permitAll();
 
         //autorisation sur les controllers restful
         http.authorizeRequests().antMatchers("/api/login", "/", "/api/ajouterMembre", "/api/Livre/nbLivres").permitAll();

@@ -38,8 +38,24 @@ public class Livre {
     @Column(name="etiquette")
     private String etiquette;
 
-    @Column(name="disponible")
-    private boolean disponible;
+    @Column(name="stock_total")
+    private int stockTotal;
+
+    @Column(name="stock_disponible")
+    private int stockDisponible;
+
+    // méthodes d'augmentation et de diminution du stock
+
+    public void emprunterLivre(){
+        this.stockDisponible-=1;
+    }
+
+    public void restituerLivre(){
+        this.stockDisponible+=1;
+    }
+
+
+
 
     public int getId() {
         return id;
@@ -105,11 +121,19 @@ public class Livre {
         this.etiquette = etiquette;
     }
 
-    public boolean isDisponible() {
-        return disponible;
+    public int getStockTotal() {
+        return stockTotal;
     }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
+    public void setStockTotal(int stockTotal) {
+        this.stockTotal = stockTotal;
+    }
+
+    public int getStockDisponible() {
+        return stockDisponible;
+    }
+
+    public void setStockDisponible(int stockDisponible) {
+        this.stockDisponible = stockDisponible;
     }
 }

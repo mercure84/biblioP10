@@ -70,17 +70,18 @@
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th>Editeur</th>
-                <th>Disponible</th>
+                <th>Exemplaires disponibles</th>
 
             </tr>
             </thead>
             <tbody>
             <tr th:each="ligneL : ${resultat}">
                 <td th:text="${ligneL.getTitre()}">Nom Livre</td>
-                <td th:text="${ligneL.getAuteurNom() + ' ' + ligneL.getAuteurPrenom()}">Auteur</td>
+                <td th:text="${ligneL.getAuteurNom()}">Auteur</td>
                 <td th:text="${ligneL.getEditeur()}">Editeur</td>
-                <td th:text="${ligneL.isDisponible()?'Oui':'Non'}"
-                    th:style="${ligneL.isDisponible()? 'color:green':'color:red'}">Dispo</td>
+                <td th:if="${ligneL.getStockDisponible() > 0}" th:text="${ligneL.getStockDisponible()}"
+                    style="color:green"></td>
+                <td th:if="${ligneL.getStockDisponible() == 0}">Aucune disponibilité : <a th:href="${'/client/reservation?livreId='+ ligneL.getId()}"><button>Réserver</button></a></td>
             </tr>
             </tbody>
         </table>
@@ -100,21 +101,24 @@
                 <th>Titre</th>
                 <th>Auteur</th>
                 <th>Editeur</th>
-                <th>Disponible</th>
+                <th>Exemplaires disponibles</th>
 
             </tr>
             </thead>
             <tbody>
             <tr th:each="ligneT : ${allBooks}">
                 <td th:text="${ligneT.getTitre()}">Nom Livre</td>
-                <td th:text="${ligneT.getAuteurNom() + ' ' + ligneT.getAuteurPrenom()}">Auteur</td>
+                <td th:text="${ligneT.getAuteurNom()}">Auteur</td>
                 <td th:text="${ligneT.getEditeur()}">Editeur</td>
-                <td th:text="${ligneT.isDisponible()?'Oui':'Non'}"
-                    th:style="${ligneT.isDisponible()? 'color:green':'color:red'}">Dispo</td>            </tr>
+                <td th:if="${ligneT.getStockDisponible() > 0}" th:text="${ligneT.getStockDisponible()}"
+                    style="color:green"></td>
+                <td th:if="${ligneT.getStockDisponible() == 0}">Aucune disponibilité : <a th:href="${'/client/reservation?livreId='+ ligneT.getId()}"><button>Réserver</button></a></td>          </tr>
             </tbody>
         </table>
 
 
     </div>
+
+</div>
 </body>
 </html>

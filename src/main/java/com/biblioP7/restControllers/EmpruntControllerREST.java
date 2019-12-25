@@ -1,13 +1,11 @@
 package com.biblioP7.restControllers;
 
 
-import com.biblioP7.beans.Emprunt;
-import com.biblioP7.beans.Livre;
-import com.biblioP7.beans.Membre;
+import com.biblioP7.beans.*;
 import com.biblioP7.dao.EmpruntDao;
 import com.biblioP7.dao.LivreDao;
 import com.biblioP7.dao.MembreDao;
-import com.biblioP7.beans.CreationEmprunt;
+import com.biblioP7.dao.ReservationDao;
 import com.biblioP7.security.JwtTokenUtil;
 import com.biblioP7.security.UserDetailsServiceImpl;
 import org.slf4j.Logger;
@@ -26,11 +24,9 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-public class EmpruntController {
+public class EmpruntControllerREST {
 
-    private static final Logger logger = LoggerFactory.getLogger(EmpruntController.class);
-
-
+    private static final Logger logger = LoggerFactory.getLogger(EmpruntControllerREST.class);
 
     @Autowired
     private EmpruntDao empruntDao;
@@ -40,6 +36,9 @@ public class EmpruntController {
 
     @Autowired
     private LivreDao livreDao ;
+
+    @Autowired
+    private ReservationDao reservationDao;
 
 
     // on va utiliser cette classe utilitaire pour parser le token reçu, notamment pour la méthode prolongerEmprunt
@@ -53,21 +52,27 @@ public class EmpruntController {
 
 
 
-    @RequestMapping(value="/api/listeEmprunts", method= RequestMethod.GET)
+    @GetMapping(value="/api/listeEmprunts")
     public List<Emprunt> listeEmprunts(){
         List<Emprunt> emprunts = empruntDao.findAll();
+        logger.info("[REST] Demande d'une liste d'emprunt");
         return emprunts;
     }
 
-    @RequestMapping(value="/api/listeEmpruntsEncours", method= RequestMethod.GET)
+    @GetMapping(value="/api/listeEmpruntsEncours")
     public List<Emprunt> listeEmpruntsEncours(){
         List<Emprunt> emprunts = empruntDao.findEmpruntsEncours(false);
+        logger.info("[REST] Demande d'une liste d'emprunt en cours");
+
         return emprunts;
     }
 
     @CrossOrigin("*")
     @GetMapping(value="/api/Emprunt/{id}")
     public Emprunt detailEMprunt(@PathVariable int id){
+
+        logger.info("[REST] Demande du détail de l'emprunt n° " + id);
+
         return empruntDao.findById(id);
     }
 
@@ -78,7 +83,7 @@ public class EmpruntController {
 
         List<Emprunt> listeEmprunts = empruntDao.findEmpruntsByMembre(membre);
 
-        logger.warn("[REST] Une liste d'emprunt est demandée pour le membre " + membre.getEmail());
+        logger.info("[REST] Une liste d'emprunt est demandée pour le membre " + membre.getEmail());
 
         return listeEmprunts;
     }
@@ -104,9 +109,9 @@ public class EmpruntController {
         Membre membre = membreDao.findById(membreId);
         Livre livre = livreDao.findById(livreId);
 
-        if (!livre.isDisponible()){
+        if (livre.getStockDisponible()==0){
             //le livre n'est pas disponible, on ne peut pas l'emprunter !
-            logger.error("Impossible de créer l'emprunt : Membre =" + membre.getEmail() + " Livre =" + livre.getId() );
+            logger.error("[REST] Impossible de créer l'emprunt : Membre =" + membre.getEmail() + " Livre =" + livre.getId() );
             return null;
 
         }
@@ -122,10 +127,10 @@ public class EmpruntController {
 
             empruntDao.save(nouvelEmprunt);
 
-            //passage et sauvegarde du livre en tant que non disponible (à modifier plus tard si nous gérons la quantité ?)
-            livre.setDisponible(false);
+            //l'emprunt est validé, on sauvegarde le livre en diminuant son stock de 1
+            livre.emprunterLivre();
             livreDao.save(livre);
-            logger.warn(" [REST] Nouvel emprunt créé id = " + nouvelEmprunt.getId() + " membre = " + nouvelEmprunt.getMembre().getNom() + " livre = " + nouvelEmprunt.getLivre().getTitre() );
+            logger.info(" [REST] Nouvel emprunt créé id = " + nouvelEmprunt.getId() + " membre = " + nouvelEmprunt.getMembre().getNom() + " livre = " + nouvelEmprunt.getLivre().getTitre() );
             return nouvelEmprunt;
         }
 
@@ -154,7 +159,7 @@ public class EmpruntController {
 // CONTROLE BACKEND DE LA POSSIBILITE DE PROLONGER LEMPRUNT
 
         if(empruntAProlonger.isProlonge() || empruntAProlonger.getFinDate().before(new Date()) || empruntAProlonger.isRendu()){
-            logger.info("impossible de prolonger l'emprunt " + empruntAProlonger.getId());
+            logger.error("[REST] impossible de prolonger l'emprunt " + empruntAProlonger.getId());
             return null;
 
 
@@ -169,20 +174,15 @@ public class EmpruntController {
 
             empruntAProlonger.setFinDate(dateFinBis);
             empruntDao.save(empruntAProlonger);
-            logger.warn("l'emprunt n° " + empruntAProlonger.getId() + " a bien été prolongé !");
+            logger.info("[REST] L'emprunt n° " + empruntAProlonger.getId() + " a bien été prolongé !");
             return empruntAProlonger;
-
         }}
-
         else {
 
             return null;
         }
-
-
     }
 
-    @CrossOrigin("*")
     @RequestMapping(value="/api/stopperEmprunt/{id}")
     public Livre livreRendu(@PathVariable int id){
 
@@ -190,19 +190,55 @@ public class EmpruntController {
         Emprunt emprunt = empruntDao.findById(id);
         emprunt.setFinDate(new Date());
         emprunt.setRendu(true);
-
-        //on tope le livre à disponible = true
-        Livre livreRendu = livreDao.findById(emprunt.getLivre().getId());
-        livreRendu.setDisponible(true);
-
-        //on save les 2 entités livre / emprunt
-        livreDao.save(livreRendu);
         empruntDao.save(emprunt);
+        logger.info("[REST] Arrêt de l'emprunt " + emprunt);
 
-        logger.warn("Arrêt de l'emprunt " + emprunt.getId());
+        //RG un livre est rendu, avant de le rentrer en stock on regarde si une réservation peut être servie
+        Livre livreRendu = livreDao.findById(emprunt.getLivre().getId());
+
+        List<Reservation> listeResaLivre = reservationDao.trouverResaEncoursParLivre(livreRendu);
+
+        // si on trouve une liste de réservation sur le livre on va parcourir cette liste et opérer les traitements adequats
+        boolean absenceNewOption = true;
+        if (listeResaLivre.size() > 0){
+            //on parcours la liste des réservation qui est ordonnée par les ID
+            for (int i = 0 ; i < listeResaLivre.size() ; i++){
+                if ((listeResaLivre.get(i).isEncours()) && (listeResaLivre.get(i).getDateDebut() == null)){
+                    //si on est ici c'est qu'on a attrapé une résa en cours qui n'a pas encore commencée !!
+                    Reservation premiereResa = listeResaLivre.get(i) ;
+                    premiereResa.setDetail("Livre Disponible");
+                    // on met une date de fin à la résa (+48h)
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(new Date());
+                    c.add(Calendar.DATE, 2);
+                    Date dateFin = c.getTime();
+                    premiereResa.setDateFin(dateFin);
+                    premiereResa.setDateDebut(new Date());
+                    // on informe le membre par mail :
+                    Membre premierMembre = premiereResa.getMembre();
+                    Livre livre = premiereResa.getLivre();
+                    logger.info("[REST] Envoi d'un mail sur la résa n° : " + premiereResa.getId() + " " + premierMembre.getEmail());
+
+                    System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getNom() + ", vous attendiez le livre " +
+                            livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
+                    // on sauvegarde la résa en persistance !
+                    reservationDao.save(premiereResa);
+                    absenceNewOption = false;
+                    // on sort de notre boucle for
+                    break;
+                }
+            }
+
+            }
+
+        if (absenceNewOption){
+
+           //on remplit le stock du livre +1
+            logger.info("[REST] Rentrée en stock du libre " + livreRendu.getId());
+            livreRendu.restituerLivre();
+            livreDao.save(livreRendu);
+        }
         return livreRendu;
-
-
     }
 
 
@@ -211,6 +247,8 @@ public class EmpruntController {
     public List<Emprunt> empruntsExpires (){
         Date today = new Date();
         List<Emprunt> emprunts = empruntDao.findEmpruntsExpires(false, today);
+        logger.info("[REST] Demande de la liste des emprunts expirés");
+
         return emprunts;
     }
 
@@ -242,7 +280,7 @@ public class EmpruntController {
                     } catch(Exception error){
             resultat = "Le batch a échoué !" + error;
         }
-        logger.warn(resultat);
+        logger.info("[REST] Traitement du batch des emprunts échus");
         return resultat;
     }
 
@@ -276,7 +314,7 @@ public class EmpruntController {
 
         } catch (IOException error){
 //            System.out.println("IO Exception interceptée : " + error);
-            logger.error("problème dans la génération des mails auto " + error);
+            logger.error("[REST] problème dans la génération des mails auto " + error);
         }
 
     }

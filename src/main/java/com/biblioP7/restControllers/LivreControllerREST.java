@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-public class LivreController {
+public class LivreControllerREST {
 
-    private static final Logger logger = LoggerFactory.getLogger(LivreController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LivreControllerREST.class);
 
 
     @Autowired
@@ -25,13 +25,17 @@ public class LivreController {
     @RequestMapping(value="/api/Livre/listeLivres", method= RequestMethod.GET)
     public List<Livre> listeLivres(){
         List<Livre> livres = livreDao.findAll();
+        logger.info("[REST] Demande de la liste de livres");
+
         return livres;
     }
 
     @CrossOrigin("*")
     @RequestMapping(value="/api/Livre/listeLivresDisponibles", method= RequestMethod.GET)
     public List<Livre> listeLivresDisponibles(){
-        List<Livre> livres = livreDao.findLivresByDisponibleIsTrueOrderById();
+        List<Livre> livres = livreDao.findLivresByStockDisponibleGreaterThanOrderByTitre(0);
+        logger.info("[REST] Demande de la liste de livres disponibles");
+
         return livres;
     }
 
@@ -41,11 +45,12 @@ public class LivreController {
     @RequestMapping(value="/api/Livre/nbLivres", method= RequestMethod.GET)
     public Map<String, Integer> nbLivres(){
         Map<String, Integer> resultat = new HashMap<>();
-        int nbLivres = livreDao.findAll().size();
-        int nbLivresDispo = livreDao.findLivresByDisponibleIsTrueOrderById().size();
+        int nbLivres = livreDao.calculerStockTotal();
+        int nbLivresDispo = livreDao.calculerStockDispo();
 
         resultat.put("nbLivres", nbLivres);
         resultat.put("nbLivresDispo", nbLivresDispo);
+        logger.info("[REST] Demande du nombres de livres dispo :" + nbLivresDispo + " et total : " + nbLivres);
 
         return resultat;
     }
@@ -62,9 +67,11 @@ public class LivreController {
     @CrossOrigin("*")
     @GetMapping(value="/api/Livre/randomLivre")
     public Livre randomLivreDispo(){
-        List<Livre> livresDispo = livreDao.findLivresByDisponibleIsTrueOrderById();
+        List<Livre> livresDispo = livreDao.findLivresByStockDisponibleGreaterThanOrderByTitre(0);
         Random rand = new Random();
         Livre livreRandom = livresDispo.get(rand.nextInt(livresDispo.size()));
+        logger.info("[REST] Un livre au hasard : " + livreRandom);
+
         return livreRandom;
     }
 
@@ -95,16 +102,15 @@ public class LivreController {
             return new ResponseEntity<>(resultat, HttpStatus.OK);
         } catch (Exception e) {
 
+            logger.error("[REST] Problème dans la recherche d'un libre typeRecherche // champRecherche:"  + typeRecherche + " // " + champRecherche);
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur " + e );        }
-
-
     }
-
-
 
 
     @PostMapping(value="/api/Livre/ajouterLivre")
     public void ajouterLivre(@RequestBody Livre livre){
+        logger.info("[REST] Aujout d'un nouveau livre : "+ livre);
         livreDao.save(livre);
     }
 

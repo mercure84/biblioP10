@@ -28,7 +28,9 @@ public class MainController {
     @GetMapping(value="/client")
     public String index (HttpSession session, Model model){
 
-        // on passe quelques données sur la bdd une fois que le membre est connecté
+
+
+        // on passe les stats de stock de livres à titre d'informations une fois que le membre est connecté
         Map<String, Integer> compterLivres = livreServiceClient.nbLivres();
 
         model.addAttribute("nbLivres", compterLivres.get("nbLivres"));
@@ -39,7 +41,7 @@ public class MainController {
     }
 
     @GetMapping(value="/client/error")
-    public String error(){
+    public String error(Model model){
 
 
         return "error";

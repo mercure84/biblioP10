@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
+<div th:include="bootstrapcdn.html"/>
+<head>
+    <head>
+        <meta charset="utf-8">
+        <title>Annulation d'un réservation</title>
+    </head>
+<body>
+
+<!-- nav bar -->
+<div th:include="navbar"/>
+
+<div class="container">
+    <div class="row" id="bandeau0">
+        <div class="col-md-12">
+            <h2>Annulation d'une réservation </h2>
+            <p>Toute annulation de réservation est définitive, votre bibliothèque ne pourra prendre en compte aucune réclamation à ce sujet</p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-10">
+
+            <p>Che(è)r(e) <span th:text="${membre.getPrenom() + ' ' + membre.getNom()}"></span> : confirmez vous l'annulation de la réservation suivante </p>
+
+                <p>Livre : <span style="color:red" th:text="${resaToCancel.getLivre().getTitre()}">  </span></p>
+                <p>Date initiale de réservation : <span th:text="${#dates.format(resaToCancel.getDateDebut(), 'dd-MM-yyyy')}"></span></p>
+
+
+            <p>  <a th:href="${'validerAnnulation?resaId=' + resaToCancel.getId()}"><button>OUI</button></a><span>       </span><a href="/client/recherche"><button>NON</button></a></p>
+
+            </a></div>
+    </div>
+
+
+</div>
+
+</body>
+<div th:include="jscdn.html"/>
+</html>
