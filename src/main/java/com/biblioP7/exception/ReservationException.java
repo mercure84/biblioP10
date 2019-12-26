@@ -8,7 +8,6 @@ public class ReservationException extends Exception {
     public ReservationException(String pMessage) {
         super(pMessage);
 
-
     }
 
 }

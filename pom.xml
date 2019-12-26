@@ -110,6 +110,14 @@
 		</dependency>
 
 
+<!--		DEPENDENCE D'ENVOI DE MAIL -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>2.1.8.RELEASE</version>
+		</dependency>
+
 
 		<!-- Jackson JSON Processor -->
 		<dependency>

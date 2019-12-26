@@ -1,14 +1,18 @@
 package com.biblioP7.test;
 
+import com.biblioP7.dao.EmpruntDao;
+import com.biblioP7.restControllers.EmpruntControllerREST;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class EmpruntControllerRESTTest {
 
-    @Test
-    void listeEmprunts() {
-    }
+//    @Test
+//    void listeEmprunts() {
+//    EmpruntControllerREST empruntControllerREST = new EmpruntControllerREST();
+//    empruntControllerREST.listeEmprunts();
+//    }
 
     @Test
     void listeEmpruntsEncours() {

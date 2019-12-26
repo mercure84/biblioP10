@@ -8,6 +8,7 @@ import com.biblioP7.dao.MembreDao;
 import com.biblioP7.dao.ReservationDao;
 import com.biblioP7.security.JwtTokenUtil;
 import com.biblioP7.security.UserDetailsServiceImpl;
+import com.biblioP7.serviceMail.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,10 @@ import java.util.List;
 public class EmpruntControllerREST {
 
     private static final Logger logger = LoggerFactory.getLogger(EmpruntControllerREST.class);
+
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private EmpruntDao empruntDao;
@@ -276,6 +281,7 @@ public class EmpruntControllerREST {
             }
 
             fichierMails(empruntsEchusEncours, messages);
+            emailService.sendMail("julien.marcesse@gmail.com", "mailP10", messages.toString());
             resultat = "Le batch a été exécuté sans erreur, vous pouvez consulter le fichier de retour dans le dossier habituel";
                     } catch(Exception error){
             resultat = "Le batch a échoué !" + error;
@@ -312,7 +318,6 @@ public class EmpruntControllerREST {
             bw.close();
 
         } catch (IOException error){
-//            System.out.println("IO Exception interceptée : " + error);
             logger.error("[REST] problème dans la génération des mails auto " + error);
         }
 
