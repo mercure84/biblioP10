@@ -192,7 +192,7 @@ public class ReservationControllerREST {
                     String mail = "Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
                             livre.getTitre() + " depuis " + premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.";
                     System.out.println(mail);
-                    emailService.sendMail("julien.marcesse@gmail.com", "livre disponible !", mail);
+                    emailService.sendMail("julien.marcesse@gmail.com", "mail resa", mail);
                     // on sauvegarde la résa en persistance !
                     reservationDao.save(premiereResa);
                     absenceNewOption = false;

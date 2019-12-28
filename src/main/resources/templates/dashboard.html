@@ -82,7 +82,7 @@
                 <td th:text="${resa.getReservation().getId()}">Id</td>
                 <td th:text="${resa.getReservation().getLivre().getTitre()}">Livre</td>
                 <td th:text="${#dates.format(resa.getReservation().getDateDemande(), 'dd-MM-yyyy')}">Demande Date</td>
-                <td th:text="${resa.getPosition()}">XX</td>
+                <td th:text="(${resa.getReservation().isEncours()}? ${resa.getPosition()} : ' - ')">XX</td>
                 <td><span th:if="${resa.getReservation().getDateDebut()!=null}" th:text="'Jusqu\'au ' + ${#dates.format(resa.getReservation().getDateFin(), 'dd-MM-yyyy')}">Start Option</span></td>
                 <td><a th:href="${'/client/annulerReservation?resaId='+ resa.getReservation().getId()}"><button th:if="${resa.getReservation().isEncours()}">Annuler</button></a><span th:if="${!resa.getReservation().isEncours()}" th:text="${resa.getReservation().getDetail()}">détail</span></td>
 

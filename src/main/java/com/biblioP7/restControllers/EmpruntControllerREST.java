@@ -224,8 +224,10 @@ public class EmpruntControllerREST {
                     Livre livre = premiereResa.getLivre();
                     logger.info("[REST] Envoi d'un mail sur la résa n° : " + premiereResa.getId() + " " + premierMembre.getEmail());
 
-                    System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getNom() + ", vous attendiez le livre " +
-                            livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
+                    String mailResa = "Cher " + premierMembre.getPrenom() + " " + premierMembre.getNom() + ", vous attendiez le livre " +
+                            livre.getTitre() + " depuis "+ premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.";
+                    emailService.sendMail("julien.marcesse@gmail.com", "resaP10", mailResa);
+
                     // on sauvegarde la résa en persistance !
                     reservationDao.save(premiereResa);
                     absenceNewOption = false;
