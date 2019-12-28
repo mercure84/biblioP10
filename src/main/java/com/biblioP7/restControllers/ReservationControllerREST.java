@@ -7,6 +7,7 @@ import com.biblioP7.dao.LivreDao;
 import com.biblioP7.dao.MembreDao;
 import com.biblioP7.dao.ReservationDao;
 import com.biblioP7.exception.ReservationException;
+import com.biblioP7.serviceMail.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +34,20 @@ public class ReservationControllerREST {
     @Autowired
     private EmpruntDao empruntDao;
 
-    @CrossOrigin("*")
+    @Autowired
+    EmailService emailService;
+
     @PostMapping(value = "/api/listeReservationsMembre")
     public List<Reservation> listeReservationsMembre(@RequestHeader("Authorization") String token, @RequestBody int membreId) {
         Membre membre = membreDao.findById(membreId);
         return reservationDao.findAllByMembreOrderByIdDesc(membre);
     }
 
-    @CrossOrigin("*")
     @GetMapping(value = "/api/listeReservationsEnCours")
     public List<Reservation> listeReservationsEnCours() {
         return reservationDao.findReservationsEncours(true);
     }
 
-    @CrossOrigin("*")
     @PostMapping(value = "/api/creerReservation")
     public Reservation creerReservation(@RequestHeader("Authorization") String token, @RequestBody Reservation reservation) throws ReservationException {
 
@@ -159,7 +160,7 @@ public class ReservationControllerREST {
 
             gererListeAttente(livreLibere);
         }
-        logger.info("Les réservation suivantes ont été mises en statut expiré : " + listeResaPurge);
+        logger.info(" *** BATCH RESERVATIONS*** Les réservation suivantes ont été mises en statut expiré : " + listeResaPurge);
         return listeResaPurge;
     }
 
@@ -188,8 +189,10 @@ public class ReservationControllerREST {
                     Livre livre = premiereResa.getLivre();
                     logger.info("[REST] Envoi d'un mail concernant la resa " + premiereResa.getId() + premierMembre.getEmail());
 
-                    System.out.println("Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
-                            livre.getTitre() + " depuis " + premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.");
+                    String mail = "Cher " + premierMembre.getPrenom() + " " + premierMembre.getPrenom() + ", vous attendiez le livre " +
+                            livre.getTitre() + " depuis " + premiereResa.getDateDemande() + ", le voici disponible pour 48h à votre bibliothèque préférée !! Ne tardez pas à venir le chercher.";
+                    System.out.println(mail);
+                    emailService.sendMail("julien.marcesse@gmail.com", "livre disponible !", mail);
                     // on sauvegarde la résa en persistance !
                     reservationDao.save(premiereResa);
                     absenceNewOption = false;
