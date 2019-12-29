@@ -1,24 +1,24 @@
 package com.biblioP7.test;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class MembreControllerRESTTest {
+public class MembreControllerRESTTest {
 
     @Test
-    void listeMembres() {
+    public void listeMembres() {
     }
 
     @Test
-    void dataMembre() {
+    public void dataMembre() {
     }
 
     @Test
-    void detailMembre() {
+    public void detailMembre() {
     }
 
     @Test
-    void ajouterMembre() {
+    public void ajouterMembre() {
     }
 }

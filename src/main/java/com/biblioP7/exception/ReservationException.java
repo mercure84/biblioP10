@@ -1,13 +1,14 @@
 package com.biblioP7.exception;
 
-public class ReservationException extends Exception {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 1L;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public class ReservationException extends RuntimeException {
 
     public ReservationException(String pMessage) {
         super(pMessage);
-
     }
 
 }

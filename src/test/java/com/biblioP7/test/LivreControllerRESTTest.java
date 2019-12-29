@@ -1,36 +1,36 @@
 package com.biblioP7.test;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class LivreControllerRESTTest {
+public class LivreControllerRESTTest {
 
     @Test
-    void listeLivres() {
+    public void listeLivres() {
     }
 
     @Test
-    void listeLivresDisponibles() {
+    public void listeLivresDisponibles() {
     }
 
     @Test
-    void nbLivres() {
+    public void nbLivres() {
     }
 
     @Test
-    void detailLivre() {
+    public void detailLivre() {
     }
 
     @Test
-    void randomLivreDispo() {
+    public void randomLivreDispo() {
     }
 
     @Test
-    void filtrerLivres() {
+    public void filtrerLivres() {
     }
 
     @Test
-    void ajouterLivre() {
+    public void ajouterLivre() {
     }
 }

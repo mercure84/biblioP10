@@ -1,43 +1,40 @@
 package com.biblioP7.test;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class ReservationControllerRESTTest {
+public class ReservationControllerRESTTest {
 
     @Test
-    void listeReservationsMembre() {
-
-
-
+    public void listeReservationsMembre() {
     }
 
     @Test
-    void listeReservationsEnCours() {
+    public void listeReservationsEnCours() {
     }
 
     @Test
-    void creerReservation() {
+    public void creerReservation() {
     }
 
     @Test
-    void detailReservation() {
+    public void detailReservation() {
     }
 
     @Test
-    void annulerReservation() {
+    public void annulerReservation() {
     }
 
     @Test
-    void listeResaPositions() {
+    public void listeResaPositions() {
     }
 
     @Test
-    void purgerListeResa() {
+    public void purgerListeResa() {
     }
 
     @Test
-    void validerOption() {
+    public void validerOption() {
     }
 }

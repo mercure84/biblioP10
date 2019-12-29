@@ -1,10 +1,8 @@
 package com.biblioP7.test;
-
-
 import com.biblioP7.beans.*;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
 import java.util.Date;
+
 
 public class BeansTest {
 
