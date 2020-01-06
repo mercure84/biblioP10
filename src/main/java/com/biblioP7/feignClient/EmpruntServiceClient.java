@@ -37,7 +37,6 @@ public interface EmpruntServiceClient {
     Livre livreRendu(@RequestHeader("Authorization") String token, @PathVariable int id);
 
 
-    @CrossOrigin("*")
     @GetMapping(value="/api/listeEmpruntsExpires")
     List<Emprunt> empruntsExpires (@RequestHeader("Authorization") String token);
 

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 // gère l'API de login  ==> si l'authent est OK on utilise JwtTokenUtil pour créer un token
 @RestController
-@CrossOrigin
 public class JwtAuthenticationController {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationController.class);

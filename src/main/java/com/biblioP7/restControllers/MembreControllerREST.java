@@ -23,7 +23,6 @@ public class MembreControllerREST {
     @Autowired
     private MembreDao membreDao;
 
-    @CrossOrigin("*")
     @RequestMapping(value="/api/listeMembres", method= RequestMethod.GET)
     public List<Membre> listeMembres(){
         List<Membre> membres = membreDao.findAllByOrderByIdAsc();
@@ -32,7 +31,6 @@ public class MembreControllerREST {
         return membres;
     }
 
-    @CrossOrigin("*")
     @GetMapping(value="/api/Membre/data/{email}")
     public Membre dataMembre(@PathVariable String email){
 
@@ -42,7 +40,6 @@ public class MembreControllerREST {
     }
 
 
-    @CrossOrigin("*")
     @GetMapping(value="/api/Membre/{id}")
     public Membre detailMembre(@PathVariable int id){
 
@@ -52,7 +49,6 @@ public class MembreControllerREST {
     }
 
 
-    @CrossOrigin("*")
     @PostMapping(value="/api/ajouterMembre")
     public Membre ajouterMembre(@RequestBody RegisterForm userForm){
 

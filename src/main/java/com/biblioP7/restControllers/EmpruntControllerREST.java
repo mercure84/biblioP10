@@ -72,7 +72,6 @@ public class EmpruntControllerREST {
         return emprunts;
     }
 
-    @CrossOrigin("*")
     @GetMapping(value="/api/Emprunt/{id}")
     public Emprunt detailEMprunt(@PathVariable int id){
 
@@ -141,7 +140,6 @@ public class EmpruntControllerREST {
 
     }
 
-    @CrossOrigin("*")
     @RequestMapping(value="/api/prolongerEmprunt/{id}", method= RequestMethod.GET)
     public Emprunt prolongerEmprunt(@PathVariable int id, @RequestHeader("Authorization") String token){
 
@@ -249,7 +247,6 @@ public class EmpruntControllerREST {
     }
 
 
-    @CrossOrigin("*")
     @RequestMapping(value="/api/listeEmpruntsExpires", method= RequestMethod.GET)
     public List<Emprunt> empruntsExpires (){
         Date today = new Date();
@@ -262,7 +259,6 @@ public class EmpruntControllerREST {
 
 //    IMPLEMENTATION DU BATCH DE RELANCE ==> création d'un fichier avec la liste des mails à envoyer !
 
-    @CrossOrigin
     @RequestMapping(value="/api/runBatch", method=RequestMethod.GET)
     public String batch(){
         String resultat = null;

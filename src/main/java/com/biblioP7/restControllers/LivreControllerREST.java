@@ -21,7 +21,6 @@ public class LivreControllerREST {
     @Autowired
     private LivreDao livreDao;
 
-    @CrossOrigin("*")
     @RequestMapping(value="/api/Livre/listeLivres", method= RequestMethod.GET)
     public List<Livre> listeLivres(){
         List<Livre> livres = livreDao.findAll();
@@ -30,7 +29,6 @@ public class LivreControllerREST {
         return livres;
     }
 
-    @CrossOrigin("*")
     @RequestMapping(value="/api/Livre/listeLivresDisponibles", method= RequestMethod.GET)
     public List<Livre> listeLivresDisponibles(){
         List<Livre> livres = livreDao.findLivresByStockDisponibleGreaterThanOrderByTitre(0);
@@ -41,7 +39,6 @@ public class LivreControllerREST {
 
 
 
-    @CrossOrigin("*")
     @RequestMapping(value="/api/Livre/nbLivres", method= RequestMethod.GET)
     public Map<String, Integer> nbLivres(){
         Map<String, Integer> resultat = new HashMap<>();
@@ -55,16 +52,11 @@ public class LivreControllerREST {
         return resultat;
     }
 
-
-
-
-    @CrossOrigin("*")
     @GetMapping(value="/api/Livre/{id}")
     public Livre detailLivre(@PathVariable int id){
         return livreDao.findById(id);
     }
 
-    @CrossOrigin("*")
     @GetMapping(value="/api/Livre/randomLivre")
     public Livre randomLivreDispo(){
         List<Livre> livresDispo = livreDao.findLivresByStockDisponibleGreaterThanOrderByTitre(0);
@@ -75,7 +67,6 @@ public class LivreControllerREST {
         return livreRandom;
     }
 
-    @CrossOrigin("*")
     @GetMapping(value="/api/Livre/filtrerLivres")
     public ResponseEntity<?> filtrerLivres(@RequestParam(name="typeRecherche") String typeRecherche, @RequestParam(name="champRecherche") String champRecherche){
 

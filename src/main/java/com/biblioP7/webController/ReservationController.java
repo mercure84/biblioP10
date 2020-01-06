@@ -40,11 +40,6 @@ public class ReservationController {
         Membre membre = membreServiceClient.dataMembre(token, email);
         model.addAttribute("membre", membre);
         model.addAttribute("livre", livreToReservation);
-
-        //TODO
-        // vérifier que le livre respecte les RG de la réservation : liste résa = maximum de 2 x le nombre d'exemplaire dispo de l'ouvrage
-        // impossible de réserver un livre déjà emprunté par le même utilisateur
-
         return "reservation";
     }
 
@@ -65,7 +60,7 @@ public class ReservationController {
             return "redirect:/client/dashboard";
 
         } catch (ReservationException e) {
-            model.addAttribute("erreurMessage", "La reservation n'est pas possible :  " + e.toString());
+            model.addAttribute("erreurMessage", e.getMessage());
             return "error";
 
         }
