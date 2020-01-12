@@ -51,11 +51,8 @@ public class MembreControllerREST {
 
     @PostMapping(value="/api/ajouterMembre")
     public Membre ajouterMembre(@RequestBody RegisterForm userForm){
-
         if(!userForm.getPassword().equals(userForm.getRepassword()))
             throw new RuntimeException(("You must confirm your password"));
-
-
         Membre user = membreDao.findByEmail(userForm.getEmail());
         if(user != null) throw new RuntimeException("Utilisateur déjà enregistré !");
         Membre membre = new Membre();
@@ -64,10 +61,8 @@ public class MembreControllerREST {
         membre.setEmail(userForm.getEmail());
         String encodedPassword = EncryptedPasswordUtils.encryptePassword(userForm.getPassword());
         membre.setPassword(encodedPassword);
-
         membreDao.save(membre);
         logger.info("[REST] Un nouveau membre a été ajouté à la BDD " + membre);
-
         return membre;
     }
 

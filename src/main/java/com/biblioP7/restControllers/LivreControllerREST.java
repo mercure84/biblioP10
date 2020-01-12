@@ -100,9 +100,20 @@ public class LivreControllerREST {
 
 
     @PostMapping(value="/api/Livre/ajouterLivre")
-    public void ajouterLivre(@RequestBody Livre livre){
+    public Livre ajouterLivre(@RequestBody Livre livre){
         logger.info("[REST] Aujout d'un nouveau livre : "+ livre);
         livreDao.save(livre);
+        return livre;
     }
+
+
+    @GetMapping(value="/api/Livre/supprimer/{id}")
+    void supprimerLivre(@PathVariable int id){
+        Livre livreToDetele = livreDao.findById(id);
+        livreDao.delete(livreToDetele);
+    }
+
+
+
 
 }

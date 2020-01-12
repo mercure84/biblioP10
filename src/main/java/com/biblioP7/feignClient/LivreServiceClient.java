@@ -33,6 +33,9 @@ public interface LivreServiceClient {
     List<Livre> filtrerLivres(@RequestHeader("Authorization") String token, @RequestParam(name="typeRecherche") String typeRecherche, @RequestParam(name="champRecherche") String champRecherche);
 
     @PostMapping(value="/api/Livre/ajouterLivre")
-    void ajouterLivre(@RequestHeader("Authorization") String token, @RequestBody Livre livre);
+    Livre ajouterLivre(@RequestHeader("Authorization") String token, @RequestBody Livre livre);
+
+    @GetMapping(value="/api/Livre/supprimer/{id}")
+    void supprimerLivre(@RequestHeader("Authorization") String token, @PathVariable int id);
 
 }
