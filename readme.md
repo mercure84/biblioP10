@@ -1,7 +1,7 @@
-#Bienvenue dans mon Projet 7 du Parcours Développeur d'Application Java (OpenClassrooms).
+#Bienvenue dans mon Projet 10 du Parcours Développeur d'Application Java (OpenClassrooms).
 
 
-Le projet est actuellement déployé sur mon serveur privé virtuel d'OVH. L'URL est la suivante : xxxx
+Le projet est actuellement déployé sur mon serveur privé virtuel d'OVH. L'URL est la suivante : http://vps671888.ovh.net:8080/
 
 Vous pouvez tester l'application sans risque avec le login test@test.com et le mdp : test.
  
@@ -9,7 +9,7 @@ Un jeu de données "ADMIN" peut être délivré pour accéder à la partie ADMIN
 
 ##Si vous souhaitez installer le projet sur votre propre serveur, je vous propose de suivre les instructions suivantes :
 
-Récupérer le dépôt git du projet : https://github.com/mercure84/biblioP7
+Récupérer le dépôt git du projet : https://github.com/mercure84/biblioP10
 
 **Il s'agit d'une application Spring Boot packagée avec Maven et qui peut être déployée sur un serveur Tomcat 9.**
 
