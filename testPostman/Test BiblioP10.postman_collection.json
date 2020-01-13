@@ -1,0 +1,437 @@
+{
+	"info": {
+		"_postman_id": "cf8b7f44-ba99-484b-a6cd-1a1780f4ce0f",
+		"name": "Test BiblioP10",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Connexion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b1572334-a68d-4fc3-bfdb-2e85ed9f6275",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"token\", 'Bearer '+jsonData.token);",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"julien.marcesse@gmail.com\",\r\n    \"password\": \"paris75\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "nbLivres",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b9c3d68-634a-48b6-ad10-abfffc9c23d4",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/Livre/nbLivres",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Livre",
+						"nbLivres"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListeEmprunts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6525e4d3-786b-46d1-bda1-0767371f4833",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/listeEmprunts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"listeEmprunts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DetailEmprunt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb3aa27d-96b4-4bdf-83cf-31d801f2a0f2",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/EmpruntsMembre/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"EmpruntsMembre",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DetailMembre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "513c9c80-963c-4f55-a18f-4c6dc39d87c0",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/Membre/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Membre",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dataMembreByEmail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "61250deb-0da2-47b6-9e07-d08a2bbf3916",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/Membre/data/julien.marcesse@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Membre",
+						"data",
+						"julien.marcesse@gmail.com"
+					]
+				},
+				"description": "retourne un membre à partir d'un email"
+			},
+			"response": []
+		},
+		{
+			"name": "FiltreLivres",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c1977b5a-3b76-4c6b-86f0-8996d9c7fee5",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/Livre/filtrerLivres?typeRecherche=Auteur&champRecherche=moliere",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Livre",
+						"filtrerLivres"
+					],
+					"query": [
+						{
+							"key": "typeRecherche",
+							"value": "Auteur"
+						},
+						{
+							"key": "champRecherche",
+							"value": "moliere"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListeReservationsEncours",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f11e085b-10ea-4e94-9786-da4c92201623",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/listeReservationsEnCours",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"listeReservationsEnCours"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ajouterLivre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0f58d8c6-db84-4a25-ad79-77200a13503f",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"idLivreTest\", jsonData.id);",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"isbn\": \"testISBN\",\n    \"titre\": \"Livre de Test\",\n    \"auteurNom\": \"Test Auteur\",\n    \"auteurPrenom\": null,\n    \"editeur\": \"Hachette Test\",\n    \"collection\": \"Collection Test\",\n    \"etiquette\": null,\n    \"stockTotal\": 2,\n    \"stockDisponible\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/Livre/ajouterLivre",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Livre",
+						"ajouterLivre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteLivre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "88b9eace-9187-4d4b-9cf1-73bbb6f0e2ef",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/Livre/supprimer/{{idLivreTest}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Livre",
+						"supprimer",
+						"{{idLivreTest}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
