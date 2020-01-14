@@ -100,7 +100,7 @@ INSERT INTO public.membre VALUES (6, 'Marant', 'Arnold', 'hokkos@live.fr', '$2a$
 -- Name: emprunt_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.emprunt_id_seq', 86, true);
+SELECT pg_catalog.setval('public.emprunt_id_seq', 1, true);
 
 
 --
@@ -114,7 +114,7 @@ SELECT pg_catalog.setval('public.livre_id_seq', 31, true);
 -- Name: membre_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.membre_id_seq', 1, false);
+SELECT pg_catalog.setval('public.membre_id_seq', 48, false);
 
 
 --
