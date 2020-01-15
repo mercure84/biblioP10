@@ -3,7 +3,6 @@ package com.biblioP7.test;
 import com.biblioP7.beans.Emprunt;
 import com.biblioP7.dao.EmpruntDao;
 import com.biblioP7.restControllers.EmpruntControllerREST;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;

@@ -1,6 +1,4 @@
 package com.biblioP7.restControllers;
-
-
 import com.biblioP7.beans.*;
 import com.biblioP7.dao.EmpruntDao;
 import com.biblioP7.dao.LivreDao;
@@ -17,8 +15,6 @@ import java.util.*;
 
 @RestController
 public class ReservationControllerREST {
-
-    //private static final Logger logger = LoggerFactory.getLogger(EmpruntController.class);
 
     private static final Logger logger = LoggerFactory.getLogger(MembreControllerREST.class);
 
