@@ -96,6 +96,8 @@
 					"script": {
 						"id": "6525e4d3-786b-46d1-bda1-0767371f4833",
 						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"idEmpruntTest\", jsonData[0].id);",
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
 						],
 						"type": "text/javascript"
@@ -153,7 +155,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/EmpruntsMembre/3",
+					"raw": "http://localhost:8080/api/Emprunt/{{idEmpruntTest}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -161,8 +163,8 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"EmpruntsMembre",
-						"3"
+						"Emprunt",
+						"{{idEmpruntTest}}"
 					]
 				}
 			},
@@ -192,7 +194,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/Membre/3",
+					"raw": "http://localhost:8080/api/Membre/6",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -201,7 +203,7 @@
 					"path": [
 						"api",
 						"Membre",
-						"3"
+						"6"
 					]
 				}
 			},
@@ -427,6 +429,97 @@
 						"Livre",
 						"supprimer",
 						"{{idLivreTest}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ajouterMembre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bd36c492-4fdd-4cf6-80ae-e7f0f6329cf6",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.environment.set(\"idMembreTest\", jsonData.id);",
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nom\": \"NomTestInteg\",\r\n    \"prenom\": \"PrenomTestInteg\",\r\n    \"email\": \"chaville@chaville.fr\",\r\n    \"password\" : \"test123\",\r\n    \"repassword\" : \"test123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/ajouterMembre",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"ajouterMembre"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteMembre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e292b432-2413-4e1b-84da-1798e6eb4624",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/Membre/supprimer/{{idMembreTest}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"Membre",
+						"supprimer",
+						"{{idMembreTest}}"
 					]
 				}
 			},

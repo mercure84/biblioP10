@@ -111,6 +111,8 @@ public class LivreControllerREST {
     void supprimerLivre(@PathVariable int id){
         Livre livreToDetele = livreDao.findById(id);
         livreDao.delete(livreToDetele);
+        logger.info("[REST] Suppression d'un livre" + livreToDetele.toString());
+
     }
 
 

@@ -15,15 +15,15 @@ public interface MembreServiceClient {
     @GetMapping(value="/api/listeMembres")
     List<Membre> listeMembres(@RequestHeader("Authorization") String token);
 
-
-
     @GetMapping(value="/api/Membre/data/{email}")
     Membre dataMembre(@RequestHeader("Authorization") String token, @PathVariable String email);
 
 
-
     @GetMapping(value="/api/Membre/{id}")
     Membre detailMembre(@RequestHeader("Authorization") String token, @PathVariable int id);
+
+    @GetMapping(value="/api/Membre/supprimer/{id}")
+    void supprimerMembre(@RequestHeader("Authorization") String token, @PathVariable int id);
 
 
     //méthodes sans request TOKEN

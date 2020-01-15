@@ -8,8 +8,8 @@ import com.biblioP7.security.EncryptedPasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 
@@ -66,6 +66,12 @@ public class MembreControllerREST {
         return membre;
     }
 
+    @GetMapping(value="/api/Membre/supprimer/{id}")
+    void supprimerMembre(@PathVariable int id){
+        Membre membreToDetele = membreDao.findById(id);
+        membreDao.delete(membreToDetele);
+        logger.info("[REST] Suppression d'un membre" + membreToDetele.toString());
+    }
 
 
 
