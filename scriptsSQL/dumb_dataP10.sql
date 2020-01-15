@@ -107,7 +107,7 @@ SELECT pg_catalog.setval('public.emprunt_id_seq', 1, true);
 -- Name: livre_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.livre_id_seq', 31, true);
+SELECT pg_catalog.setval('public.livre_id_seq', 33, true);
 
 
 --
