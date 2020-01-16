@@ -1,7 +1,10 @@
 package com.biblioP7.test;
 
+import com.biblioP7.beans.Emprunt;
 import com.biblioP7.beans.Livre;
+import com.biblioP7.beans.Membre;
 import com.biblioP7.beans.Reservation;
+import com.biblioP7.dao.EmpruntDao;
 import com.biblioP7.dao.ReservationDao;
 import com.biblioP7.exception.ReservationException;
 import com.biblioP7.restControllers.ReservationControllerREST;
@@ -28,6 +31,9 @@ public class ReservationControllerRESTTest {
 
     @Mock
     ReservationDao reservationDao;
+
+    @Mock
+    EmpruntDao empruntDao;
 
 
     @Test
@@ -56,7 +62,7 @@ public class ReservationControllerRESTTest {
 
 // test qui doit montrer que la résa est impossible car livre déjà trop réservé
     @Test(expected = ReservationException.class)
-    public void creerReservationTest(){
+    public void creerReservationTestFail(){
         Reservation reservation = new Reservation();
         Livre livre = new Livre();
         livre.setStockTotal(2);
@@ -70,4 +76,79 @@ public class ReservationControllerRESTTest {
         listeResaMock.add(new Reservation());
         when(reservationDao.trouverResaEncoursParLivre(reservation.getLivre())).thenReturn(listeResaMock);
         Reservation resultat = reservationControllerREST.creerReservation("token", reservation);
-}}
+        System.out.println(resultat);
+}
+//test qui doit montrer que la résa est impossible car le membre a déjà une réservation en cours pour ce livre
+    @Test(expected = ReservationException.class)
+    public void creerReservationTestFailBis(){
+        //on instancie la réservation demandée
+        Reservation reservation = new Reservation();
+        Livre livre = new Livre();
+        Membre membre = new Membre();
+        reservation.setLivre(livre);
+        reservation.setMembre(membre);
+
+        //on instancie une réservation déjà existante pour le même livre pour générer le cas d'exception
+        Reservation reservationMembre = new Reservation();
+        reservationMembre.setLivre(livre);
+        reservationMembre.setMembre(membre);
+        reservationMembre.setEncours(true);
+
+        List<Reservation> listeResaExistante = new ArrayList<>();
+        listeResaExistante.add(reservationMembre);
+
+        //bypass de la première condition d'exception (trop de livres réservés)
+        when(reservationDao.trouverResaEncoursParLivre(reservation.getLivre())).thenReturn(new ArrayList<Reservation>());
+        when(reservationDao.trouverResaEncoursParMembre(reservation.getMembre())).thenReturn(listeResaExistante);
+        Reservation resultat = reservationControllerREST.creerReservation("token", reservation);
+        }
+
+//test qui doit montrer que la résa est impossible car le membre a déjà un emprunt en cours pour ce livre
+    @Test(expected = ReservationException.class)
+    public void creerReservationTestFailTer(){
+        //on instancie la réservation demandée
+        Reservation reservation = new Reservation();
+        Livre livre = new Livre();
+        Membre membre = new Membre();
+        reservation.setLivre(livre);
+        reservation.setMembre(membre);
+
+        //on instancie un emprunt déjà existant et en cours pour le même livre pour générer le cas d'exception
+        Emprunt emprunt = new Emprunt();
+        emprunt.setLivre(livre);
+        emprunt.setMembre(membre);
+        emprunt.setRendu(false);
+
+        List<Emprunt> listeEmpruntsExistant = new ArrayList<>();
+        listeEmpruntsExistant.add(emprunt);
+
+        //bypass de la première condition d'exception (trop de livres réservés?)
+        when(reservationDao.trouverResaEncoursParLivre(reservation.getLivre())).thenReturn(new ArrayList<Reservation>());
+        //bypass de la deuxième condition d'exception (réservation en cours ?)
+        when(reservationDao.trouverResaEncoursParMembre(reservation.getMembre())).thenReturn(new ArrayList<Reservation>());
+        when(empruntDao.trouverEmpruntEncoursParMembre(reservation.getMembre())).thenReturn(listeEmpruntsExistant);
+        Reservation resultat = reservationControllerREST.creerReservation("token", reservation);
+    }
+
+    @Test
+    public void creerReservationTestSuccess(){
+        //on instancie la réservation demandée
+        Reservation reservation = new Reservation();
+        Livre livre = new Livre();
+        livre.setStockTotal(3);
+        Membre membre = new Membre();
+        reservation.setLivre(livre);
+        reservation.setMembre(membre);
+        //bypass de la première condition d'exception (trop de livres réservés?)
+        when(reservationDao.trouverResaEncoursParLivre(reservation.getLivre())).thenReturn(new ArrayList<Reservation>());
+        //bypass de la deuxième condition d'exception (réservation en cours ?)
+        when(reservationDao.trouverResaEncoursParMembre(reservation.getMembre())).thenReturn(new ArrayList<Reservation>());
+        //bypass de la 3ème condition d'exception (emprunt en cours ?)
+        when(empruntDao.trouverEmpruntEncoursParMembre(reservation.getMembre())).thenReturn(new ArrayList<Emprunt>());
+        Reservation resultat = reservationControllerREST.creerReservation("token", reservation);
+        assertThat(resultat.toString());
+    }
+
+    }
+
+

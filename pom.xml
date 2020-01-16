@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.biblioP7</groupId>
 	<artifactId>biblioP7</artifactId>
-	<version>3.0.1-RELEASE</version>
+	<version>3.0.2-RELEASE</version>
 	<name>biblioP7</name>
 	<description>API REST BiblioP7</description>
 	<packaging>jar</packaging>

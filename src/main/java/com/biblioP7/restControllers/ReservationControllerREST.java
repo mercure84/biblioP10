@@ -80,6 +80,7 @@ public class ReservationControllerREST {
         reservation.setDateDemande(dateDemande);
         reservation.setEncours(true);
         reservationDao.save(reservation);
+        logger.info("Nouvelle réservation " + reservation);
         return reservation;
 
 
